@@ -15,6 +15,9 @@ app.get('/', function (req, res) {
 
 app.get('/allperson',db.getAllPerson);
 
+app.get('/getperson/:id',db.getPerson);
+
+
 var port = process.env.PORT || 8080;
 app.listen(port, function () {
 console.log('App is running on http://localhost:' + port);
