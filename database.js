@@ -40,8 +40,18 @@ function getPerson(req, res) {
 }
 
 function insertRoomSeq(req, res) {
+    console.log(req.body);
+    var personid = req.body.idc;
+    var no = req.body.no;
+    var room = req.body.room;
+    var date = req.body.date;
+    console.log(personid);
+    console.log(no);
+    console.log(room);
+    console.log(date);
+    
     db.any('insert into roomseq(personid, no, room, date)' +
-        'values('+req.params.id+',"'+req.params.no+'","'+req.params.room+'","'+req.params.date+'")', req.body)
+        "values("+personid+","+no+",'"+room+"','"+date+"')")
         .then(function (data) {
             res.status(200)
                 .json({
