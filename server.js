@@ -16,6 +16,7 @@ app.get('/', function (req, res) {
 app.get('/allperson',db.getAllPerson);
 
 app.get('/getperson/:id',db.getPerson);
+app.post('/roomseq/id/:id/no/:no/room/:room/date/:date', db.insertRoomSeq);
 
 
 var port = process.env.PORT || 8080;
