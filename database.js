@@ -4,9 +4,9 @@ var db = pgp('postgres://ejhivrfxrvzsam:e6ea27848d6af9115aa2c68040e674502dbfb9d2
 function getAllPerson(req, res) {
     db.any('select * from persons').then(function (data) {
         res.status(200).json({
-            status: 'success',
-            data: data,
-            message: 'Retrieved ALL products'
+        
+             data
+           
         });
     }).catch(function (error) {
         console.log(error);
