@@ -5,7 +5,7 @@ function getAllPerson(req, res) {
     db.any('select * from persons').then(function (data) {
         res.status(200).json({
         
-             data
+             
            
         });
     }).catch(function (error) {
