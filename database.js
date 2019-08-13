@@ -19,11 +19,11 @@ function getAllPerson(req, res) {
 function getPerson(req, res) {
     // console.log("req = "+req.params.idp);
     db.any('select * from persons where personid = ' + req.params.id).then(function (data) {
-        res.status(200).json({
-            status: 'success',
-            data: data,
-            message: 'Retrieved ALL products'
-        });
+        res.status(200).json(
+         
+           data
+     
+        );
     }).catch(function (error) {
         console.log(error);
         res.status(500).json({
