@@ -19,6 +19,7 @@ app.get('/getperson/:id',db.getPerson);
 
 app.post('/roomseq', db.insertRoomSeq);
 
+app.get('/roomseq/:id' ,db.getRoomSeqHn)
 
 var port = process.env.PORT || 8080;
 app.listen(port, function () {

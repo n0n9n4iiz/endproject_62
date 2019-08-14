@@ -58,10 +58,30 @@ function insertRoomSeq(req, res) {
             console.log('ERROR:', error)
         })
 }
+function getRoomSeqHn(req, res) {
+   
+    db.any('SELECT roomseq.hn, no, room, date '+
+        'FROM persons '+
+        'INNER JOIN roomseq '+
+        'ON persons.hn = roomseq.hn where personid = '+req.params.id).then(function (data) {
+        res.status(200).json(
+               data
+               
+        );
+    }).catch(function (error) {
+        console.log(error);
+        res.status(500).json({
+            status: 'failed',
+            data: data,
+            message: 'Failed To Retrieved ALL products'
+        });
+    })
+}
 
 
 module.exports = {
     getAllPerson,
     getPerson,
-    insertRoomSeq
+    insertRoomSeq,
+    getRoomSeqHn
 }
