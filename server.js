@@ -15,13 +15,13 @@ app.get('/', function (req, res) {
 
 app.get('/allperson',db.getAllPerson);
 
-app.get('/getperson/:id',db.getPerson);
+app.get('/getperson',db.getPerson);
 
 app.post('/roomseq', db.insertRoomSeq);
 
 app.get('/roomseq/:id' ,db.getRoomSeqHn)
 
-app.get('/roomseq/:id/date?today=date' ,db.getMyactivitytoday)
+app.get('/roomseq/' ,db.getMyactivitytoday)
 
 var port = process.env.PORT || 8080;
 app.listen(port, function () {

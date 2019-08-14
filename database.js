@@ -19,7 +19,7 @@ function getAllPerson(req, res) {
 
 function getPerson(req, res) {
     // console.log("req = "+req.params.idp);
-    db.any('select * from persons where hn = ' + req.params.id).then(function (data) {
+    db.any('select * from persons where hn = ' + req.query.id).then(function (data) {
         res.status(200).json( 
                data      
         );
@@ -77,7 +77,7 @@ function getMyactivitytoday(req, res) {
     db.any('SELECT  no,room,date'+
     ' FROM persons'+
     ' INNER JOIN roomseq'+
-    " ON persons.hn = roomseq.hn where personid = "+req.params.id+" and date like '"+req.params.date+"%'").then(function (data) {
+    " ON persons.hn = roomseq.hn where personid = "+req.query.id+" and date like '"+req.query.date+"%'").then(function (data) {
         res.status(200).json( 
                data      
         );
