@@ -15,7 +15,7 @@ app.get('/', function (req, res) {
 
 app.get('/allperson',db.getAllPerson);
 
-app.get('/getperson',db.getPerson);
+app.get('/getperson/:id',db.getPerson);
 
 app.post('/roomseq', db.insertRoomSeq);
 
@@ -23,6 +23,7 @@ app.get('/roomseq/:id' ,db.getRoomSeqHn)
 
 app.get('/roomseq/' ,db.getMyactivitytoday)
 
+app.delete('/roomseq/deleteRoomseq/',db.deleteRoomseqByNo)
 var port = process.env.PORT || 8080;
 app.listen(port, function () {
 console.log('App is running on http://localhost:' + port);

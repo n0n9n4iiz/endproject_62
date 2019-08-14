@@ -19,7 +19,7 @@ function getAllPerson(req, res) {
 
 function getPerson(req, res) {
     // console.log("req = "+req.params.idp);
-    db.any('select * from persons where hn = ' + req.query.id).then(function (data) {
+    db.any('select * from persons where hn = ' + req.params.id).then(function (data) {
         res.status(200).json( 
                data      
         );
@@ -100,11 +100,28 @@ function getMyactivitytoday(req, res) {
     })
 }
 
+function deleteRoomseqByNo(req, res) {
+db.any('DELETE FROM roomseq WHERE hn = '+req.query.hn+" and date = '"+req.query.date+"' and no="+req.query.no+';').then(function (data) {
+    res.status(200).json( 
+        
+    );
+}).catch(function (error) {
+    console.log(error);
+    res.status(500).json({
+        status: 'failed',
+        data: data,
+        message: 'Failed To Retrieved ALL products'
+    });
+})
+}
+
+
 
 module.exports = {
     getAllPerson,
     getPerson,
     insertRoomSeq,
     getRoomSeqHn,
-    getMyactivitytoday
+    getMyactivitytoday,
+    deleteRoomseqByNo
 }
