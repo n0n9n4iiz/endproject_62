@@ -74,10 +74,19 @@ function getRoomSeqHn(req, res) {
     })
 }
 function getMyactivitytoday(req, res) {
+    
+        var str = req.query.date;
+        var adjustDate = str.substring(0, 1);
+        if(adjustDate=="0"){
+        adjustDate = str.substring(1, 10);
+        }else{
+        adjustDate = str.substring(0, 10);
+        }
+      
     db.any('SELECT  no,room,date'+
     ' FROM persons'+
     ' INNER JOIN roomseq'+
-    " ON persons.hn = roomseq.hn where personid = "+req.query.id+" and date like '"+req.query.date+"%'").then(function (data) {
+    " ON persons.hn = roomseq.hn where personid = "+req.query.id+" and date like '"+adjustDate+"%'").then(function (data) {
         res.status(200).json( 
                data      
         );
