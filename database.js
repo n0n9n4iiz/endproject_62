@@ -19,11 +19,12 @@ function getAllPerson(req, res) {
 
 function getPerson(req, res) {
     // console.log("req = "+req.params.idp);
-    db.any('select * from persons where personid = ' + req.params.id).then(function (data) {
+    db.any('select * from persons where hn = ' + req.params.id).then(function (data) {
         res.status(200).json(
-         
-           data
-     
+            
+           
+               data
+                
         );
     }).catch(function (error) {
         console.log(error);
@@ -37,17 +38,15 @@ function getPerson(req, res) {
 
 function insertRoomSeq(req, res) {
     console.log(req.body);
-    var personid = req.body.idc;
+    var hn = req.body.hn;
     var no = req.body.no;
     var room = req.body.room;
     var date = req.body.date;
-    console.log(personid);
-    console.log(no);
-    console.log(room);
-    console.log(date);
+    var time = req.body.time;
+
     
-    db.any('insert into roomseq(personid, no, room, date)' +
-        "values("+personid+","+no+",'"+room+"','"+date+"')")
+    db.any('insert into roomseq(hn, no, room, date, time)' +
+        "values("+hn+","+no+",'"+room+"','"+date+"','"+time+"')")
         .then(function (data) {
             res.status(200)
                 .json({
