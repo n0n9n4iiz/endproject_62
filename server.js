@@ -21,7 +21,7 @@ app.post('/roomseq', db.insertRoomSeq);
 
 app.get('/roomseq/:id' ,db.getRoomSeqHn)
 
-app.get('/roomseq/:id/:date' ,db.getMyactivitytoday)
+app.get('/roomseq/:id/date?today=date' ,db.getMyactivitytoday)
 
 var port = process.env.PORT || 8080;
 app.listen(port, function () {
