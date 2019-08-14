@@ -83,7 +83,7 @@ function getMyactivitytoday(req, res) {
         adjustDate = str.substring(0, 10);
         }
       
-    db.any('SELECT  no,room,date,hn'+
+    db.any('SELECT  no,room,date'+
     ' FROM persons'+
     ' INNER JOIN roomseq'+
     " ON persons.hn = roomseq.hn where personid = "+req.query.id+" and date like '"+adjustDate+"%'").then(function (data) {
