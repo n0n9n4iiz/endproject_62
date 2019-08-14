@@ -20,11 +20,8 @@ function getAllPerson(req, res) {
 function getPerson(req, res) {
     // console.log("req = "+req.params.idp);
     db.any('select * from persons where hn = ' + req.params.id).then(function (data) {
-        res.status(200).json(
-            
-           
-               data
-                
+        res.status(200).json( 
+               data      
         );
     }).catch(function (error) {
         console.log(error);
@@ -65,8 +62,24 @@ function getRoomSeqHn(req, res) {
         'INNER JOIN roomseq '+
         'ON persons.hn = roomseq.hn where personid = '+req.params.id).then(function (data) {
         res.status(200).json(
-               data
-               
+               data   
+        );
+    }).catch(function (error) {
+        console.log(error);
+        res.status(500).json({
+            status: 'failed',
+            data: data,
+            message: 'Failed To Retrieved ALL products'
+        });
+    })
+}
+function getMyactivitytoday(req, res) {
+    db.any('SELECT  no,room,date'+
+    ' FROM persons'+
+    ' INNER JOIN roomseq'+
+    " ON persons.hn = roomseq.hn where personid = "+id+" and date like '"+date+"%'").then(function (data) {
+        res.status(200).json( 
+               data      
         );
     }).catch(function (error) {
         console.log(error);
@@ -83,5 +96,6 @@ module.exports = {
     getAllPerson,
     getPerson,
     insertRoomSeq,
-    getRoomSeqHn
+    getRoomSeqHn,
+    getMyactivitytoday
 }

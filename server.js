@@ -21,6 +21,8 @@ app.post('/roomseq', db.insertRoomSeq);
 
 app.get('/roomseq/:id' ,db.getRoomSeqHn)
 
+app.get('/roomseq/:id/:date' ,db.getMyactivitytoday)
+
 var port = process.env.PORT || 8080;
 app.listen(port, function () {
 console.log('App is running on http://localhost:' + port);
