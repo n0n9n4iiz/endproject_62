@@ -150,12 +150,32 @@ function getAllRoomseq(req, res) {
     })
 }
 function getHistoryByDate(req, res) {
-
     db.any('SELECT date '+
     'FROM persons '+
     'INNER JOIN roomseq '+
     'ON persons.hn = roomseq.hn '+
     'where personid = '+req.params.id+' group by date order by date').then(function (data) {
+        res.status(200).json(  
+             data
+        );
+    }).catch(function (error) {
+        console.log(error);
+        res.status(500).json({
+            status: 'failed',
+            data: data,
+            message: 'Failed To Retrieved ALL products'
+        });
+    })
+}
+
+function getHistoryItem(req, res) {
+    var id = req.body.id;
+    var date = req.body.date;
+    db.any('SELECT no,room,date '+
+        'FROM persons '+
+        'INNER JOIN roomseq '+
+        'ON persons.hn = roomseq.hn '+
+        "where personid = "+id+" and date like '"+date+"%' order by no").then(function (data) {
         res.status(200).json(  
              data
         );
@@ -181,5 +201,6 @@ module.exports = {
     deleteRoomseqByNo,
     addNewByUser,
     getAllRoomseq,
-    getHistoryByDate
+    getHistoryByDate,
+    getHistoryItem
 }
