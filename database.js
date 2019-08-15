@@ -169,8 +169,8 @@ function getHistoryByDate(req, res) {
 }
 
 function getHistoryItem(req, res) {
-    var id = req.body.id;
-    var date = req.body.date;
+    var id = req.query.id;
+    var date = req.query.date;
     db.any('SELECT no,room,date '+
         'FROM persons '+
         'INNER JOIN roomseq '+
