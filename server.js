@@ -19,9 +19,11 @@ app.get('/getperson/:id',db.getPerson);
 
 app.post('/roomseq', db.insertRoomSeq);
 
-app.get('/roomseq/:id' ,db.getRoomSeqHn)
+app.post('/roomseq/addnew', db.addNewByUser); 
 
-app.get('/roomseq/' ,db.getMyactivitytoday)
+app.get('/roomseq/:id' ,db.getRoomSeqHn);
+
+app.get('/roomseq/' ,db.getMyactivitytoday);
 
 app.delete('/roomseq/deleteRoomseq/',db.deleteRoomseqByNo)
 

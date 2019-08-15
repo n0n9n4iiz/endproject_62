@@ -41,7 +41,6 @@ function insertRoomSeq(req, res) {
     var date = req.body.date;
     var time = req.body.time;
 
-    
     db.any('insert into roomseq(hn, no, room, date, time)' +
         "values("+hn+","+no+",'"+room+"','"+date+"','"+time+"')")
         .then(function (data) {
@@ -115,6 +114,28 @@ db.any('DELETE FROM roomseq WHERE hn = '+req.query.hn+" and date = '"+req.query.
 })
 }
 
+function insertRoomSeq(req, res) {
+   
+    var hn = req.body.hn;
+    var no = req.body.no;
+    var room = req.body.room;
+    var date = req.body.date;
+    //var time = req.body.time;
+
+    db.any('insert into roomseq(hn, no, room, date)' +
+        "values("+hn+","+no+",'"+room+"','"+date+"')")
+        .then(function (data) {
+            res.status(200)
+                .json({
+                    status: 'success',
+                    message: 'Inserted one product'
+                });
+        })
+        .catch(function (error) {
+            console.log('ERROR:', error)
+        })
+}
+
 
 
 module.exports = {
@@ -123,5 +144,6 @@ module.exports = {
     insertRoomSeq,
     getRoomSeqHn,
     getMyactivitytoday,
-    deleteRoomseqByNo
+    deleteRoomseqByNo,
+    addNewByUser
 }
