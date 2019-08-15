@@ -115,13 +115,13 @@ db.any('DELETE FROM roomseq WHERE hn = '+req.query.hn+" and date = '"+req.query.
 }
 
 function addNewByUser(req, res) {
-   
+    // var d = new Date();
+    // var time = d.toLocaleDateString();
     var hn = req.body.hn;
     var no = req.body.no;
     var room = req.body.room;
     var date = req.body.date;
     //var time = req.body.time;
-
     db.any('insert into roomseq(hn, no, room, date)' +
         "values("+hn+","+no+",'"+room+"','"+date+"')")
         .then(function (data) {
@@ -135,6 +135,40 @@ function addNewByUser(req, res) {
             console.log('ERROR:', error)
         })
 }
+function getAllRoomseq(req, res) {
+    db.any('select * from roomseq').then(function (data) {
+        res.status(200).json(  
+             data
+        );
+    }).catch(function (error) {
+        console.log(error);
+        res.status(500).json({
+            status: 'failed',
+            data: data,
+            message: 'Failed To Retrieved ALL products'
+        });
+    })
+}
+function getHistoryByDate(req, res) {
+
+    db.any('SELECT date '+
+    'FROM persons '+
+    'INNER JOIN roomseq '+
+    'ON persons.hn = roomseq.hn '+
+    'where personid = '+req.params.id+' group by date order by date').then(function (data) {
+        res.status(200).json(  
+             data
+        );
+    }).catch(function (error) {
+        console.log(error);
+        res.status(500).json({
+            status: 'failed',
+            data: data,
+            message: 'Failed To Retrieved ALL products'
+        });
+    })
+}
+
 
 
 
@@ -145,5 +179,7 @@ module.exports = {
     getRoomSeqHn,
     getMyactivitytoday,
     deleteRoomseqByNo,
-    addNewByUser
+    addNewByUser,
+    getAllRoomseq,
+    getHistoryByDate
 }

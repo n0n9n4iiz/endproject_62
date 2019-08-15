@@ -15,6 +15,10 @@ app.get('/', function (req, res) {
 
 app.get('/allperson',db.getAllPerson);
 
+app.get('/allroomseq',db.getAllRoomseq);
+
+app.get('/historybydate/:id',db.getHistoryByDate)
+
 app.get('/getperson/:id',db.getPerson);
 
 app.post('/roomseq', db.insertRoomSeq);
