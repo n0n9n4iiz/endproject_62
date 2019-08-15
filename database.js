@@ -86,7 +86,7 @@ function getMyactivitytoday(req, res) {
     db.any('SELECT  no,room,date,roomseq.hn'+
     ' FROM persons'+
     ' INNER JOIN roomseq'+
-    " ON persons.hn = roomseq.hn where personid = "+req.query.id+" and date like '"+adjustDate+"%'").then(function (data) {
+    " ON persons.hn = roomseq.hn where personid = "+req.query.id+" and date like '"+adjustDate+"%' order by no").then(function (data) {
         res.status(200).json( 
                data      
         );
