@@ -114,7 +114,7 @@ db.any('DELETE FROM roomseq WHERE hn = '+req.query.hn+" and date = '"+req.query.
 })
 }
 
-function insertRoomSeq(req, res) {
+function addNewByUser(req, res) {
    
     var hn = req.body.hn;
     var no = req.body.no;
