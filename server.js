@@ -19,7 +19,7 @@ app.get('/allroomseq',db.getAllRoomseq);
 
 app.get('/historybydate/:id',db.getHistoryByDate)
 
-app.get('/historyItem',db.getHistoryItem)
+app.get('/historyItem/',db.getHistoryItem)
 
 app.get('/getperson/:id',db.getPerson);
 
