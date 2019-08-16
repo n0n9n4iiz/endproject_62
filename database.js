@@ -102,7 +102,6 @@ function getMyactivitytoday(req, res) {
 function deleteRoomseqByNo(req, res) {
 db.any('DELETE FROM roomseq WHERE hn = '+req.query.hn+" and date = '"+req.query.date+"' and no="+req.query.no+';').then(function (data) {
     res.status(200).json( 
-        
     );
 }).catch(function (error) {
     console.log(error);
@@ -114,16 +113,54 @@ db.any('DELETE FROM roomseq WHERE hn = '+req.query.hn+" and date = '"+req.query.
 })
 }
 
-function addNewByUser(req, res) {
+
+ async function addNewByUser(req, res) { 
     // var d = new Date();
     // var time = d.toLocaleDateString();
     var hn = req.body.hn;
     var no = req.body.no;
     var room = req.body.room;
-    var date = req.body.date;
+    let date = req.body.date;
+    let tdata
+    let noplus
     //var time = req.body.time;
+  await db.any("select no,date,room,hn from roomseq where hn = '"+hn+"' order by no").then(function (data) {
+    tdata = data
+    res.status(200)
+    .json({
+        status: 'success',
+        message: 'Inserted one product'
+    });
+
+    }).catch(function (error) {
+        console.log(error);
+        res.status(500).json({
+            status: 'failed',
+            data: data,
+            message: 'Failed To Retrieved ALL products'
+        });
+    })
+
+    const check = await checkdate(date,tdata)
+
+    //console.log("check ="+check);
+   var count = 0;
+    if(check == undefined){
+        noplus = 1
+    }else{
+        for(var j =0;j<tdata.length;j++){
+            if(check == tdata[j].date){
+                count++
+            }
+        }
+        noplus = count+1
+    }
+    
+    for(i=0;i<tdata.length;i++){
+        console.log(tdata[i])
+    }
     db.any('insert into roomseq(hn, no, room, date)' +
-        "values("+hn+","+no+",'"+room+"','"+date+"')")
+        "values("+hn+","+noplus+",'"+room+"','"+date+"')")
         .then(function (data) {
             res.status(200)
                 .json({
@@ -135,11 +172,29 @@ function addNewByUser(req, res) {
             console.log('ERROR:', error)
         })
 }
-function getAllRoomseq(req, res) {
-    db.any('select * from roomseq').then(function (data) {
-        res.status(200).json(  
-             data
-        );
+
+async function checkdate(date,tdata){
+   let result = await loopcheckdate(date,tdata)
+     //console.log("result:"+result) // 
+     return result 
+}
+
+function loopcheckdate(date,tdata) {
+    let result
+    for  ( let i = 0; i < tdata.length; i++) {
+        if (tdata[i].date == date) {
+           result = tdata[i].date
+           break
+        }
+      }
+      return result
+}
+
+
+async function getAllRoomseq(req, res) {
+    let tdata
+    await db.any('select * from roomseq').then(function (data) {
+       tdata = data
     }).catch(function (error) {
         console.log(error);
         res.status(500).json({
@@ -149,6 +204,7 @@ function getAllRoomseq(req, res) {
         });
     })
 }
+
 function getHistoryByDate(req, res) {
     db.any('SELECT date '+
     'FROM persons '+
