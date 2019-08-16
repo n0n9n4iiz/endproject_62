@@ -19,7 +19,7 @@ function getAllPerson(req, res) {
 
 function getPerson(req, res) {
     // console.log("req = "+req.params.idp);
-    db.any('select * from persons where hn = ' + req.params.id).then(function (data) {
+    db.any('select * from persons where personid = ' + req.params.id).then(function (data) {
         res.status(200).json( 
                data      
         );
