@@ -249,18 +249,10 @@ function getHistoryItem(req, res) {
      
      let datedata;
 
-     var str = req.query.date;
-     var adjustDate = str.substring(0, 1);
-     if(adjustDate=="0"){
-     adjustDate = str.substring(1, 10);
-     }else{
-     adjustDate = str.substring(0, 10);
-     }
-
-    await db.any('SELECT  no,room,date,roomseq.hn'+
+    await db.any('SELECT date'+
 ' FROM persons'+
 ' INNER JOIN roomseq'+
-" ON persons.hn = roomseq.hn where personid = "+req.query.id+" and date = '"+adjustDate+"' order by no").then(function (data) {
+" ON persons.hn = roomseq.hn where personid = "+req.query.id+" group by date order by date").then(function (data) {
     datedata = data
     res.status(200).json( 
            data      
@@ -273,10 +265,48 @@ function getHistoryItem(req, res) {
         message: 'Failed To Retrieved ALL products'
     });
 })
-  console.log(datedata);
+  //console.log(datedata);
+//   for(var i = 0;i<datedata.length;i++){
+//       console.log(datedata[i].date);
+//   }
 
-
+    
+  var str = req.query.date;
+  var adjustDate = str.substring(0, 1);
+  var nextMonthCheck;
+  if(adjustDate=="0"){
+  adjustDate = str.substring(1, 10);
+  console.log(adjustDate);
+  adjustDate = adjustDate.substring(0,1);
+  adjustDate = parseInt(adjustDate)+1
+  console.log(adjustDate);
+  for(var i = 0;i<datedata.length;i++){
+    if(adjustDate==datedata[i].date.substring(0,1)){
+        console.log("found = "+datedata[i].date);
+        nextMonthCheck = datedata[i].date;
+        break;      
+    }
+} 
+  }else{
+  adjustDate = str.substring(0, 10);
   
+  }
+
+db.any('SELECT  no,room,date,roomseq.hn'+
+' FROM persons'+
+' INNER JOIN roomseq'+
+" ON persons.hn = roomseq.hn where personid = "+req.query.id+" and date like '"+nextMonthCheck+"%' order by no").then(function (data) {
+  res.status(200).json( 
+         data      
+  );
+}).catch(function (error) {
+  console.log(error);
+  res.status(500).json({
+      status: 'failed',
+      data: data,
+      message: 'Failed To Retrieved ALL products'
+  });
+})
 
 }
 
