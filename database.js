@@ -245,15 +245,13 @@ function getHistoryItem(req, res) {
     })
 }
 
- function getMyactivityNextday(req, res) {
-    var d = new Date();
-     var time = d.toLocaleDateString();
-     console.log(time);
-     
-    db.any('SELECT  no,room,date,roomseq.hn'+
+ async function getMyactivityNextday(req, res) {
+     let datedata;
+    await db.any('SELECT  no,room,date,roomseq.hn'+
 ' FROM persons'+
 ' INNER JOIN roomseq'+
-" ON persons.hn = roomseq.hn where personid = "+req.params.id+" and date = '8/15/2019' order by no").then(function (data) {
+" ON persons.hn = roomseq.hn where personid = "+req.query.id+" and date = '"+req.query.date+"' order by no").then(function (data) {
+    datedata = data
     res.status(200).json( 
            data      
     );
@@ -265,6 +263,11 @@ function getHistoryItem(req, res) {
         message: 'Failed To Retrieved ALL products'
     });
 })
+  console.log(datedata);
+
+
+  
+
 }
 
 
