@@ -254,32 +254,15 @@ function getHistoryItem(req, res) {
 ' INNER JOIN roomseq'+
 " ON persons.hn = roomseq.hn where personid = "+req.query.id+" group by date order by date").then(function (data) {
     datedata = data
-    res.status(200).json( 
-           data      
-    );
-}).catch(function (error) {
-    console.log(error);
-    res.status(500).json({
-        status: 'failed',
-        data: data,
-        message: 'Failed To Retrieved ALL products'
-    });
-})
-  //console.log(datedata);
-//   for(var i = 0;i<datedata.length;i++){
-//       console.log(datedata[i].date);
-//   }
-
-    
-  var str = req.query.date;
+    var str = req.query.date;
   var adjustDate = str.substring(0, 1);
   var nextMonthCheck;
   if(adjustDate=="0"){
   adjustDate = str.substring(1, 10);
-  console.log(adjustDate);
+//   console.log(adjustDate);
   adjustDate = adjustDate.substring(0,1);
   adjustDate = parseInt(adjustDate)+1
-  console.log(adjustDate);
+//   console.log(adjustDate);
   for(var i = 0;i<datedata.length;i++){
     if(adjustDate==datedata[i].date.substring(0,1)){
         console.log("found = "+datedata[i].date);
@@ -289,7 +272,7 @@ function getHistoryItem(req, res) {
 } 
   }else{
   adjustDate = str.substring(0, 10);
-  
+
   }
 
 db.any('SELECT  no,room,date,roomseq.hn'+
@@ -307,6 +290,51 @@ db.any('SELECT  no,room,date,roomseq.hn'+
       message: 'Failed To Retrieved ALL products'
   });
 })
+}).catch(function (error) {
+    console.log(error);
+    res.status(500).json({
+        status: 'failed',
+        data: data,
+        message: 'Failed To Retrieved ALL products'
+    });
+})
+    
+//   var str = req.query.date;
+//   var adjustDate = str.substring(0, 1);
+//   var nextMonthCheck;
+//   if(adjustDate=="0"){
+//   adjustDate = str.substring(1, 10);
+// //   console.log(adjustDate);
+//   adjustDate = adjustDate.substring(0,1);
+//   adjustDate = parseInt(adjustDate)+1
+// //   console.log(adjustDate);
+//   for(var i = 0;i<datedata.length;i++){
+//     if(adjustDate==datedata[i].date.substring(0,1)){
+//         console.log("found = "+datedata[i].date);
+//         nextMonthCheck = datedata[i].date;
+//         break;      
+//     }
+// } 
+//   }else{
+//   adjustDate = str.substring(0, 10);
+
+//   }
+
+// db.any('SELECT  no,room,date,roomseq.hn'+
+// ' FROM persons'+
+// ' INNER JOIN roomseq'+
+// " ON persons.hn = roomseq.hn where personid = "+req.query.id+" and date like '"+nextMonthCheck+"%' order by no").then(function (data) {
+//   res.status(200).json( 
+//          data      
+//   );
+// }).catch(function (error) {
+//   console.log(error);
+//   res.status(500).json({
+//       status: 'failed',
+//       data: data,
+//       message: 'Failed To Retrieved ALL products'
+//   });
+// })
 
 }
 
