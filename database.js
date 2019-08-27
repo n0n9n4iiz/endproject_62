@@ -245,6 +245,25 @@ function getHistoryItem(req, res) {
     })
 }
 
+ function getMyactivityNextday(req, res) {
+
+    db.any('SELECT  no,room,date,roomseq.hn'+
+' FROM persons'+
+' INNER JOIN roomseq'+
+" ON persons.hn = roomseq.hn where personid = 123456789 order by no").then(function (data) {
+    res.status(200).json( 
+           data      
+    );
+}).catch(function (error) {
+    console.log(error);
+    res.status(500).json({
+        status: 'failed',
+        data: data,
+        message: 'Failed To Retrieved ALL products'
+    });
+})
+}
+
 
 
 
@@ -258,5 +277,6 @@ module.exports = {
     addNewByUser,
     getAllRoomseq,
     getHistoryByDate,
-    getHistoryItem
+    getHistoryItem,
+    getMyactivityNextday
 }
