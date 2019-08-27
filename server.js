@@ -31,9 +31,9 @@ app.get('/roomseq/:id' ,db.getRoomSeqHn);
 
 app.get('/roomseq/' ,db.getMyactivitytoday);
 
-app.get('/roomseq/nextday' ,db.getMyactivityNextday);
-
 app.delete('/roomseq/deleteRoomseq/',db.deleteRoomseqByNo);
+
+app.get('/nextday/roomseq/:id' ,db.getMyactivityNextday);
 
 var port = process.env.PORT || 8080;
 app.listen(port, function () {

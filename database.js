@@ -246,11 +246,14 @@ function getHistoryItem(req, res) {
 }
 
  function getMyactivityNextday(req, res) {
-
+    var d = new Date();
+     var time = d.toLocaleDateString();
+     console.log(time);
+     
     db.any('SELECT  no,room,date,roomseq.hn'+
 ' FROM persons'+
 ' INNER JOIN roomseq'+
-" ON persons.hn = roomseq.hn where personid = 123456789 order by no").then(function (data) {
+" ON persons.hn = roomseq.hn where personid = "+req.params.id+" and date = '8/15/2019' order by no").then(function (data) {
     res.status(200).json( 
            data      
     );
