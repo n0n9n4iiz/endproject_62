@@ -256,20 +256,120 @@ function getHistoryItem(req, res) {
     datedata = data
     var str = req.query.date;
   var adjustDate = str.substring(0, 1);
-  var nextMonthCheck;
+  var adjustDay
+  var adjustMonth
+  var nextCheck;
   if(adjustDate=="0"){
   adjustDate = str.substring(1, 10);
-//   console.log(adjustDate);
-  adjustDate = adjustDate.substring(0,1);
-  adjustDate = parseInt(adjustDate)+1
-//   console.log(adjustDate);
-  for(var i = 0;i<datedata.length;i++){
-    if(adjustDate==datedata[i].date.substring(0,1)){
-        console.log("found = "+datedata[i].date);
-        nextMonthCheck = datedata[i].date;
-        break;      
-    }
-} 
+  var adjustDay = adjustDate.substring(2,4);
+  var adjustMonth = adjustDate.substring(0,1);
+  //var date = ["1/29", "1/30", "2/1"];
+  var myday = [adjustDay]
+  var mymonth = [adjustMonth]
+
+  checknextdate()
+  findnextdate()
+
+  function findnextdate(){
+  for (var z = 1; z < myday.length; z++) {
+      console.log("day "+myday[z]);
+
+  }
+  for (var h = 1; h < mymonth.length; h++) {
+      console.log("month "+mymonth[h]);
+
+  }
+  end:
+     for(var w = 1;w<mymonth.length;w++){
+          for(var q = 1;q<myday.length;q++){
+              console.log("day "+myday[q]);
+              console.log("month "+mymonth[w]);  
+              for(var b = 0;b<datedata.length;b++){
+                  if(myday[q]==datedata[b].date.substring(2,4)&&mymonth[w]==datedata[b].date.substring(0,1)){
+                      console.log("---------------------found-------------------");
+                      console.log(datedata[b].date);
+                      nextCheck = datedata[b].date;
+                      break end;
+                  }else{
+                      console.log("not found");
+                  }
+              }
+          }
+      }
+   }
+  function checknextdate() {
+
+      if (myday[0] == 28 && mymonth[0] == 2) {
+          console.log("A");
+          myday.length = 1
+          for (var k = 1; k < 32; k++) {
+              myday.push(k);
+          }
+
+      } else if (myday[0] == 30 && (mymonth[0] == 4 || mymonth[0] == 6 || mymonth[0] == 9 || mymonth[0] == 11)) {
+          console.log("B");
+          myday.length = 1
+          for (var k = 1; k < 32; k++) {
+              myday.push(k);
+          }
+          
+          for (var o = 1; o < 13; o++) {
+              if (mymonth[0] == o) {
+                  for (var u = o+1; u < 13; u++) {
+                      mymonth.push(u);
+                  }
+                  break
+              }
+          }
+
+      } else if (myday[0] == 31 && (mymonth[0] == 1 || mymonth[0] == 3 || mymonth[0] == 5 || mymonth[0] == 7 || mymonth[0] == 8 || mymonth[0] == 10 || mymonth[0] == 12)) {
+          console.log("C");
+          myday.length = 1
+          for (var k = 1; k < 32; k++) {
+              myday.push(k);
+          }
+          for (var o = 1; o < 13; o++) {
+              if (mymonth[0] == o) {
+                  for (var u = o+1; u < 13; u++) {
+                      mymonth.push(u);
+                  }
+                  break
+              }
+          }
+
+      } else {
+          console.log("else");
+          for (var j = 1; j < 32; j++) {
+              if (myday[0] == j) {
+                  for (var t = j+1; t < 32; t++) {
+                      myday.push(t);
+                  }
+                  break
+              }
+          }
+
+          for (var o = 1; o < 13; o++) {
+              if (mymonth[0] == o) {
+                  for (var u = o; u < 13; u++) {
+                      mymonth.push(u);
+                  }
+                  break
+              }
+          }
+
+      }
+
+  }
+  //adjustDate = adjustDate.substring(0,1);
+//   adjustDate = parseInt(adjustDate)+1
+
+//   for(var i = 0;i<datedata.length;i++){
+//     if(adjustDate==datedata[i].date.substring(0,1)){
+//         console.log("found = "+datedata[i].date);
+//         nextMonthCheck = datedata[i].date;
+//         break;      
+//     }
+// } 
   }else{
   adjustDate = str.substring(0, 10);
 
@@ -278,7 +378,7 @@ function getHistoryItem(req, res) {
 db.any('SELECT  no,room,date,roomseq.hn'+
 ' FROM persons'+
 ' INNER JOIN roomseq'+
-" ON persons.hn = roomseq.hn where personid = "+req.query.id+" and date like '"+nextMonthCheck+"%' order by no").then(function (data) {
+" ON persons.hn = roomseq.hn where personid = "+req.query.id+" and date like '"+nextCheck+"%' order by no").then(function (data) {
   res.status(200).json( 
          data      
   );
