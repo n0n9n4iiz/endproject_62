@@ -273,7 +273,7 @@ function getHistoryItem(req, res) {
               console.log("day "+myday[q]);
               console.log("month "+mymonth[w]);  
               for(var b = 0;b<datedata.length;b++){
-                  if(myday[q]==datedata[b].date.substring(2,4)&&mymonth[w]==datedata[b].date.substring(0,1)){
+                  if(myday[q]==datedata[b].date.substring(0,2)&&mymonth[w]==datedata[b].date.substring(3,5)){
                       console.log("---------------------found-------------------");
                       console.log(datedata[b].date);
                       nextCheck = datedata[b].date;
