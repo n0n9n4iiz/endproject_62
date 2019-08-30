@@ -245,15 +245,13 @@ function getHistoryItem(req, res) {
 " ON persons.hn = roomseq.hn where personid = "+req.query.id+" group by date order by date").then(function (data) {
     datedata = data
     var str = req.query.date;
-  var adjustDate = str.substring(0, 1);
   var adjustDay
   var adjustMonth
   var nextCheck;
-  if(adjustDate=="0"){
-  adjustDate = str.substring(1, 10);
-  var adjustDay = adjustDate.substring(2,4);
-  var adjustMonth = adjustDate.substring(0,1);
-  //var date = ["1/29", "1/30", "2/1"];
+  
+  var adjustDay = str.substring(0,2);
+  var adjustMonth = str.substring(3,5);
+  
   var myday = [adjustDay]
   var mymonth = [adjustMonth]
 
@@ -360,10 +358,7 @@ function getHistoryItem(req, res) {
 //         break;      
 //     }
 // } 
-  }else{
-  adjustDate = str.substring(0, 10);
-
-  }
+  
 
 db.any('SELECT  no,room,date,roomseq.hn'+
 ' FROM persons'+
