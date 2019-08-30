@@ -143,7 +143,7 @@ db.any('DELETE FROM roomseq WHERE hn = '+req.query.hn+" and date = '"+req.query.
 
     const check = await checkdate(date,tdata)
 
-    //console.log("check ="+check);
+    console.log("check ="+check);
    var count = 0;
     if(check == undefined){
         noplus = 1
@@ -156,17 +156,15 @@ db.any('DELETE FROM roomseq WHERE hn = '+req.query.hn+" and date = '"+req.query.
         noplus = count+1
     }
     
-    for(i=0;i<tdata.length;i++){
-        console.log(tdata[i])
-    }
+    
+    // for(i=0;i<tdata.length;i++){
+    //     console.log(tdata[i])
+    // }
     db.any('insert into roomseq(hn, no, room, date)' +
         "values("+hn+","+noplus+",'"+room+"','"+date+"')")
         .then(function (data) {
-            res.status(200)
-                .json({
-                    status: 'success',
-                    message: 'Inserted one product'
-                });
+           console.log("add complete");
+           
         })
         .catch(function (error) {
             console.log('ERROR:', error)
