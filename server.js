@@ -35,6 +35,8 @@ app.delete('/roomseq/deleteRoomseq/',db.deleteRoomseqByNo);
 
 app.get('/nextday/roomseq/' ,db.getMyactivityNextday);
 
+app.post('/getSuccess/',db.getSuccessByUser);
+
 var port = process.env.PORT || 8080;
 app.listen(port, function () {
 console.log('App is running on http://localhost:' + port);
