@@ -227,16 +227,16 @@ function getHistoryByDate(req, res) {
                 }
 
                 if (parseInt(datadate[i].date.substring(6, 10)) == parseInt(yyyy)) {
-                if (parseInt(datadate[i].date.substring(3, 5)) < parseInt(mm)) {
+                    if (parseInt(datadate[i].date.substring(3, 5)) < parseInt(mm)) {
                         console.log(datadate[i].date);
                         arrsetdate.push(Object.assign(date, { date: datadate[i].date }));
-                }else if(parseInt(datadate[i].date.substring(3, 5)) == parseInt(mm)){
-                    if(parseInt(datadate[i].date.substring(0, 2)) < parseInt(dd)){
-                        console.log(datadate[i].date);
-                        arrsetdate.push(Object.assign(date, { date: datadate[i].date }));
+                    } else if (parseInt(datadate[i].date.substring(3, 5)) == parseInt(mm)) {
+                        if (parseInt(datadate[i].date.substring(0, 2)) < parseInt(dd)) {
+                            console.log(datadate[i].date);
+                            arrsetdate.push(Object.assign(date, { date: datadate[i].date }));
+                        }
                     }
-                } 
-            }
+                }
             }
 
             // arrsetdate.push(Object.assign(date, { date: datadate[i].date }));
@@ -467,7 +467,7 @@ async function getMyactivityNextday(req, res) {
 
 }
 
-function getSuccessByUser() {
+function getSuccessByUser(req, res) {
     var hn = req.query.hn;
     var no = req.query.no;
     var date = req.query.date
@@ -478,6 +478,20 @@ function getSuccessByUser() {
     }).catch(function (error) {
         res.status(500).json("Update fail")
     })
+}
+
+function getDateMeet(req, res) {
+    db.any("select roomseq.hn,no,room,date from persons " +
+        "inner join roomseq " +
+        "on persons.hn = roomseq.hn " +
+        "where personid = " + req.query.id + " and date = '" + req.query.date + "' " +
+        "order by substring(date, 7, 10),substring(date, 4, 5),substring(date,1,2)").then(function (data) {
+            res.status(200).json(
+                data
+            )
+        }).catch(function (err) {
+            res.status(500).json("fail " + err)
+        })
 }
 
 
@@ -495,5 +509,6 @@ module.exports = {
     getHistoryByDate,
     getHistoryItem,
     getMyactivityNextday,
-    getSuccessByUser
+    getSuccessByUser,
+    getDateMeet
 }
