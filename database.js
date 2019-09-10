@@ -608,7 +608,7 @@ function getItemHisById(req,res){
     "from roomseq "+
     "inner join persons "+
     "on roomseq.hn = persons.hn "+
-    "where personid = "+id+" and date = '"+date+"'").then(function(data){
+    "where personid = "+id+" and date = '"+date+"' order by no" ).then(function(data){
     dataset = data
     
         res.status(200).json(
