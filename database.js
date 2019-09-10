@@ -509,11 +509,12 @@ res.status(200).json(
 }
 
 function getMonthHisbyId(req,res){
+    var year = req.query.year;
     db.any('select substring(date,4,2) as month '+
     'from persons '+
     'inner join roomseq '+
     'on persons.hn = roomseq.hn '+
-    "where personid = 1 and substring(date,7,4) = '2019' "+
+    "where personid = 1 and substring(date,7,4) = '"+year+"' "+
     'group by month').then(function(data){
     res.status(200).json(
         data
@@ -524,11 +525,13 @@ function getMonthHisbyId(req,res){
     }
 
     function getDayHisbyId(req,res){
+        var year = req.query.year;
+        var month = req.query.month;
         db.any('select substring(date,1,2) as day '+
         'from persons ' +
         'inner join roomseq '+
         'on persons.hn = roomseq.hn '+
-        "where personid = 1 and substring(date,4,2) = '09' and substring(date,7,4) = '2019' "+
+        "where personid = 1 and substring(date,4,2) = '"+month+"' and substring(date,7,4) = '"+year+"' "+
         'group by day').then(function(data){
         res.status(200).json(
             data
