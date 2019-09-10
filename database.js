@@ -589,15 +589,36 @@ function getDayHisbyId(req, res) {
                             }
                     }
                 }
-
             }
-
             res.status(200).json(
                 arrget
             )
         }).catch(function (err) {
             res.status(500).json("fail " + err)
         })
+}
+
+function getItemHisById(req,res){
+    
+    
+    var id = req.query.id;
+    var date = req.query.date;
+    var dataset;
+    db.any("select roomseq.hn,no,room,date "+
+    "from roomseq "+
+    "inner join persons "+
+    "on roomseq.hn = persons.hn "+
+    "where personid = "+id+" and date = '"+date+"'").then(function(data){
+    dataset = data
+    
+        res.status(200).json(
+            data
+        )
+    }).catch(function(err){
+        res.status(500).json(
+            "fail "+err
+        )
+    })
 }
 
 
@@ -620,5 +641,6 @@ module.exports = {
     getDateMeet,
     getYearHisbyId,
     getMonthHisbyId,
-    getDayHisbyId
+    getDayHisbyId,
+    getItemHisById // ใช้ในปัจจุบัน
 }

@@ -46,6 +46,8 @@ app.get('/hismonth/' , db.getMonthHisbyId);
 //get id and month from his month
 app.get('/hisday/' , db.getDayHisbyId);
 
+app.get('/hisitem/' , db.getItemHisById );
+
 var port = process.env.PORT || 8080;
 app.listen(port, function () {
 console.log('App is running on http://localhost:' + port);
