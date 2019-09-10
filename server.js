@@ -39,6 +39,13 @@ app.post('/getSuccess/',db.getSuccessByUser);
 
 app.get('/getDateMeet/' , db.getDateMeet);
 
+//get with id later
+app.get('/hisyear' , db.getYearHisbyId);
+//get id and year from hisyear
+app.get('/hismonth' , db.getMonthHisbyId);
+//get id and month from his month
+app.get('/hisday' , db.getDayHisbyId);
+
 var port = process.env.PORT || 8080;
 app.listen(port, function () {
 console.log('App is running on http://localhost:' + port);

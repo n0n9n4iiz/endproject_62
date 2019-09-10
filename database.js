@@ -225,7 +225,6 @@ function getHistoryByDate(req, res) {
                     console.log(datadate[i].date);
                     arrsetdate.push(Object.assign(date, { date: datadate[i].date }));
                 }
-
                 if (parseInt(datadate[i].date.substring(6, 10)) == parseInt(yyyy)) {
                     if (parseInt(datadate[i].date.substring(3, 5)) < parseInt(mm)) {
                         console.log(datadate[i].date);
@@ -493,6 +492,52 @@ function getDateMeet(req, res) {
             res.status(500).json("fail " + err)
         })
 }
+//for test
+function getYearHisbyId(req,res){
+db.any("select substring(date,7,10) as year " +
+"from persons "+
+"inner join roomseq "+
+"on persons.hn = roomseq.hn "+
+"where personid = 1 "+
+"group by year").then(function(data){
+res.status(200).json(
+    data
+)
+}).catch(function(err){
+    res.status(500).json("fail " + err)
+})
+}
+
+function getMonthHisbyId(req,res){
+    db.any('select substring(date,4,2) as month '+
+    'from persons '+
+    'inner join roomseq '+
+    'on persons.hn = roomseq.hn '+
+    "where personid = 1 and substring(date,7,4) = '2019' "+
+    'group by month').then(function(data){
+    res.status(200).json(
+        data
+    )
+    }).catch(function(err){
+        res.status(500).json("fail " + err)
+    })
+    }
+
+    function getDayHisbyId(req,res){
+        db.any('select substring(date,1,2) as day '+
+        'from persons ' +
+        'inner join roomseq '+
+        'on persons.hn = roomseq.hn '+
+        "where personid = 1 and substring(date,4,2) = '09' and substring(date,7,4) = '2019' "+
+        'group by day').then(function(data){
+        res.status(200).json(
+            data
+        )
+        }).catch(function(err){
+            res.status(500).json("fail " + err)
+        })
+        }
+
 
 
 
@@ -510,5 +555,8 @@ module.exports = {
     getHistoryItem,
     getMyactivityNextday,
     getSuccessByUser,
-    getDateMeet
+    getDateMeet,
+    getYearHisbyId,
+    getMonthHisbyId,
+    getDayHisbyId
 }
