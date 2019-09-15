@@ -455,7 +455,7 @@ function getSuccessByUser(req, res) {
     var hn = req.query.hn;
     var no = req.query.no;
     var date = req.query.date;
-    var suc = req.query.success;
+    var suc = req.body.success;
 
     db.any("update roomseq set success = '"+suc+"' where hn = " + hn + " and no = " + no + " and date = '" + date + "'").then(function (data) {
         res.status(200).json(
