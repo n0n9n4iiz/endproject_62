@@ -454,12 +454,10 @@ async function getMyactivityNextday(req, res) {
 function getSuccessByUser(req, res) {
     var hn = req.query.hn;
     var no = req.query.no;
-    var date = req.query.date
-    console.log(hn);
-    console.log(no);
-    console.log(date);
+    var date = req.query.date;
+    var suc = req.query.success;
 
-    db.any("update roomseq set success = 'success' where hn = " + hn + " and no = " + no + " and date = '" + date + "'").then(function (data) {
+    db.any("update roomseq set success = '"+suc+"' where hn = " + hn + " and no = " + no + " and date = '" + date + "'").then(function (data) {
         res.status(200).json(
             "Update success"
         );
