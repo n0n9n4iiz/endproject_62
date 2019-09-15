@@ -48,9 +48,11 @@ app.get('/hisday/' , db.getDayHisbyId);
 
 app.get('/hisitem/' , db.getItemHisById );
 
-app.patch('/updateDelete/' ,db.updateDelete);
+app.patch('/updateDelete/' ,db.updateDelete); //bug
+
+app.get('/allMeetDate' ,db.allMeetDate);
 
 var port = process.env.PORT || 8080;
 app.listen(port, function () {
-console.log('App is running on http://localhost:' + port);
+console.log('App is runnb ing on http://localhost:' + port);
 });    
