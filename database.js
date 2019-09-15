@@ -74,7 +74,7 @@ function getRoomSeqHn(req, res) {
 }
 function getMyactivitytoday(req, res) {
 
-    db.any('SELECT  no,room,date,roomseq.hn' +
+    db.any('SELECT  no,room,date,roomseq.hn,success' +
         ' FROM persons' +
         ' INNER JOIN roomseq' +
         " ON persons.hn = roomseq.hn where personid = " + req.query.id + " and date like '" + req.query.date + "%' order by no").then(function (data) {
