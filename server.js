@@ -35,7 +35,7 @@ app.delete('/roomseq/deleteRoomseq/',db.deleteRoomseqByNo);
 
 app.get('/nextday/roomseq/' ,db.getMyactivityNextday);
 
-app.post('/getSuccess/',db.getSuccessByUser);
+app.patch('/getSuccess/',db.getSuccessByUser);
 
 app.get('/getDateMeet/' , db.getDateMeet);
 
