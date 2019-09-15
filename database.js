@@ -388,19 +388,7 @@ async function getMyactivityNextday(req, res) {
                 }
 
             }
-            //adjustDate = adjustDate.substring(0,1);
-            //   adjustDate = parseInt(adjustDate)+1
-
-            //   for(var i = 0;i<datedata.length;i++){
-            //     if(adjustDate==datedata[i].date.substring(0,1)){
-            //         console.log("found = "+datedata[i].date);
-            //         nextMonthCheck = datedata[i].date;
-            //         break;      
-            //     }
-            // } 
-
-
-            db.any('SELECT  no,room,date,roomseq.hn' +
+            db.any('SELECT  no,room,date,roomseq.hn,success' +
                 ' FROM persons' +
                 ' INNER JOIN roomseq' +
                 " ON persons.hn = roomseq.hn where personid = " + req.query.id + " and date like '" + nextCheck + "%' order by no").then(function (data) {
@@ -583,10 +571,10 @@ function getDayHisbyId(req, res) {
                 } else if (parseInt(year) == parseInt(yyyy)) {
                     if (parseInt(month) < parseInt(mm)) {
                         arrget.push(Object.assign(day, { day: dataset[i].day }))
-                    }else if(parseInt(month) == parseInt(mm)){
-                            if(parseInt(dataset[i].day) < parseInt(dd)){
-                                arrget.push(Object.assign(day, { day: dataset[i].day }))
-                            }
+                    } else if (parseInt(month) == parseInt(mm)) {
+                        if (parseInt(dataset[i].day) < parseInt(dd)) {
+                            arrget.push(Object.assign(day, { day: dataset[i].day }))
+                        }
                     }
                 }
             }
@@ -598,27 +586,27 @@ function getDayHisbyId(req, res) {
         })
 }
 
-function getItemHisById(req,res){
-    
-    
+function getItemHisById(req, res) {
+
+
     var id = req.query.id;
     var date = req.query.date;
     var dataset;
-    db.any("select roomseq.hn,no,room,date "+
-    "from roomseq "+
-    "inner join persons "+
-    "on roomseq.hn = persons.hn "+
-    "where personid = "+id+" and date = '"+date+"' order by no" ).then(function(data){
-    dataset = data
-    
-        res.status(200).json(
-            data
-        )
-    }).catch(function(err){
-        res.status(500).json(
-            "fail "+err
-        )
-    })
+    db.any("select roomseq.hn,no,room,date " +
+        "from roomseq " +
+        "inner join persons " +
+        "on roomseq.hn = persons.hn " +
+        "where personid = " + id + " and date = '" + date + "' order by no").then(function (data) {
+            dataset = data
+
+            res.status(200).json(
+                data
+            )
+        }).catch(function (err) {
+            res.status(500).json(
+                "fail " + err
+            )
+        })
 }
 
 
