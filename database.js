@@ -93,7 +93,7 @@ function getMyactivitytoday(req, res) {
 
 function deleteRoomseqByNo(req, res) {
     db.any('DELETE FROM roomseq WHERE hn = ' + req.query.hn + " and date = '" + req.query.date + "' and no=" + req.query.no + ';').then(function (data) {
-        res.status(200).json(
+        res.status(200).json( 
         );
     }).catch(function (error) {
         console.log(error);
@@ -589,8 +589,6 @@ function getDayHisbyId(req, res) {
 }
 
 function getItemHisById(req, res) {
-
-
     var id = req.query.id;
     var date = req.query.date;
     var dataset;
@@ -600,7 +598,6 @@ function getItemHisById(req, res) {
         "on roomseq.hn = persons.hn " +
         "where personid = " + id + " and date = '" + date + "' order by no").then(function (data) {
             dataset = data
-
             res.status(200).json(
                 data
             )
@@ -609,6 +606,33 @@ function getItemHisById(req, res) {
                 "fail " + err
             )
         })
+}
+
+function updateDelete(req,res){
+    var dataset;
+    db.any('select * from roomseq WHERE hn = ' + req.query.hn + " and date = '" + req.query.date + "' order by no;").then(function(data){
+        dataset = data;
+        for(var i = 0;i<dataset.length;i++){
+            if(dataset[i].no != (i+1)){
+                console.log("update to be "+(i+1));
+                db.any('update roomseq set no = '+(i+1)+" where no="+dataset[i].no).then(function(data){
+                    console.log(data);
+                    
+                }).catch(function(err){
+
+                })
+            }else{
+                console.log("Don't need to change");
+                
+            }
+           
+        }
+        res.status(200).json(
+        
+        )
+    }).catch(function(err){
+
+    })
 }
 
 
@@ -632,5 +656,6 @@ module.exports = {
     getYearHisbyId,
     getMonthHisbyId,
     getDayHisbyId,
-    getItemHisById // ใช้ในปัจจุบัน
+    getItemHisById, // ใช้ในปัจจุบัน
+    updateDelete
 }
