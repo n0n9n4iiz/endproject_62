@@ -646,8 +646,9 @@ function allMeetDate(req,res){
     if (dd == 1 || dd == 2 || dd == 3 || dd == 4 || dd == 5 || dd == 6 || dd == 7 || dd == 8 || dd == 9) {
         dd = "0" + dd
     }
-db.any('select hn,date from roomseq inner join persons on roomseq.hn = persons.hn where personid = '+req.query.id+' group by date order by substring(date, 7, 10),substring(date, 4, 5),substring(date,1,2)')
+db.any('select date from roomseq inner join persons on roomseq.hn = persons.hn where personid = '+req.query.id+' group by date order by substring(date, 7, 10),substring(date, 4, 5),substring(date,1,2)')
 .then(function(data){
+
 
 for(var i=0;i<data.length;i++){
     var currdate = {} 
