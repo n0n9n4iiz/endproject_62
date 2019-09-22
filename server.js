@@ -50,9 +50,9 @@ app.get('/hisitem/' , db.getItemHisById );
 
 app.patch('/updateDelete/' ,db.updateDelete); //bug
 
-app.get('/allMeetDate' ,db.allMeetDate);
+app.get('/allMeetDate/' ,db.allMeetDate);
 
-app.get('/MeetDateByAll' ,db.getMeetByall);
+app.get('/MeetDateByAll/' ,db.getMeetByall);
 
 var port = process.env.PORT || 8080;
 app.listen(port, function () {
