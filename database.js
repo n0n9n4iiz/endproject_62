@@ -92,15 +92,45 @@ function getMyactivitytoday(req, res) {
 }
 
 function deleteRoomseqByNo(req, res) {
-    db.any('DELETE FROM roomseq WHERE hn = ' + req.query.hn + " and date = '" + req.query.date + "' and no=" + req.query.no + ';').then(function (data) {
-        res.status(200).json(
-        );
+    var hn = req.query.hn;
+    var no = req.query.no;
+    var date = req.query.date;
+    
+    db.any('DELETE FROM roomseq WHERE hn = ' + hn + " and date = '" + date + "' and no=" + no + ';').then(function () {
+        db.any('select * from roomseq WHERE hn = ' + hn + " and date = '" + date + "' order by no;").then(function (data) {
+            //for x>1
+            for(var i = 0;i<data.length;i++){
+                if (data[i].no != (i + 1)) {
+                    db.any('update roomseq set no = ' + (i + 1) + " where no=" + data[i].no).then(function () {
+                        
+                    }).catch(function (err) {
+                        res.status(500).json({
+                            err
+                        });  
+                    })
+                    console.log(data[i].no + " need change to be "+(i+1)); 
+                } else {
+                    console.log(data[i].no + " Don't need to change");
+                }
+            }
+            db.any('select * from roomseq WHERE hn = ' + hn + " and date = '" + date + "' order by no;").then(function(data){
+                res.status(200).json(
+                    data
+                )
+            }).catch(function(err){
+                err
+            })    
+            
+        }).catch(function (err) {
+            res.status(500).json({
+                err
+            });  
+        })
+
     }).catch(function (error) {
-        console.log(error);
+
         res.status(500).json({
-            status: 'failed',
-            data: data,
-            message: 'Failed To Retrieved ALL products'
+            error
         });
     })
 }
@@ -411,44 +441,6 @@ async function getMyactivityNextday(req, res) {
                 message: 'Failed To Retrieved ALL products'
             });
         })
-
-    //   var str = req.query.date;
-    //   var adjustDate = str.substring(0, 1);
-    //   var nextMonthCheck;
-    //   if(adjustDate=="0"){
-    //   adjustDate = str.substring(1, 10);
-    // //   console.log(adjustDate);
-    //   adjustDate = adjustDate.substring(0,1);
-    //   adjustDate = parseInt(adjustDate)+1
-    // //   console.log(adjustDate);
-    //   for(var i = 0;i<datedata.length;i++){
-    //     if(adjustDate==datedata[i].date.substring(0,1)){
-    //         console.log("found = "+datedata[i].date);
-    //         nextMonthCheck = datedata[i].date;
-    //         break;      
-    //     }
-    // } 
-    //   }else{
-    //   adjustDate = str.substring(0, 10);
-
-    //   }
-
-    // db.any('SELECT  no,room,date,roomseq.hn'+
-    // ' FROM persons'+
-    // ' INNER JOIN roomseq'+
-    // " ON persons.hn = roomseq.hn where personid = "+req.query.id+" and date like '"+nextMonthCheck+"%' order by no").then(function (data) {
-    //   res.status(200).json( 
-    //          data      
-    //   );
-    // }).catch(function (error) {
-    //   console.log(error);
-    //   res.status(500).json({
-    //       status: 'failed',
-    //       data: data,
-    //       message: 'Failed To Retrieved ALL products'
-    //   });
-    // })
-
 }
 
 function getSuccessByUser(req, res) {
@@ -608,34 +600,8 @@ function getItemHisById(req, res) {
         })
 }
 
-function updateDelete(req, res) {
-    var dataset;
-    db.any('select * from roomseq WHERE hn = ' + req.query.hn + " and date = '" + req.query.date + "' order by no;").then(function (data) {
-        dataset = data;
-        for (var i = 0; i < dataset.length; i++) {
-            console.log(dataset[i].no);
-            if (dataset[i].no != (i + 1)) {
-    
-                db.any('update roomseq set no = ' + (i + 1) + " where no=" + dataset[i].no).then(function (data) {
-                }).catch(function (err) {
-
-                })
-            } else {
-                console.log("Don't need to change");
-
-            }
-
-        }
-        res.status(200).json(
-
-        )
-    }).catch(function (err) {
-
-    })
-}
-
-function allMeetDate(req,res){
-    var arrset =[];
+function allMeetDate(req, res) {
+    var arrset = [];
     var today = new Date();
     var mm = today.getMonth() + 1;
     var dd = today.getDate();
@@ -646,55 +612,52 @@ function allMeetDate(req,res){
     if (dd == 1 || dd == 2 || dd == 3 || dd == 4 || dd == 5 || dd == 6 || dd == 7 || dd == 8 || dd == 9) {
         dd = "0" + dd
     }
-db.any('select date from roomseq inner join persons on roomseq.hn = persons.hn where personid = '+req.query.id+' group by date order by substring(date, 7, 10),substring(date, 4, 5),substring(date,1,2)')
-.then(function(data){
+    db.any('select date from roomseq inner join persons on roomseq.hn = persons.hn where personid = ' + req.query.id + ' group by date order by substring(date, 7, 10),substring(date, 4, 5),substring(date,1,2)')
+        .then(function (data) {
 
 
-for(var i=0;i<data.length;i++){
-    var currdate = {} 
-    day = (data[i].date).substring(0,2);
-    month = (data[i].date).substring(3,5)
-    year = (data[i].date).substring(6,10)
+            for (var i = 0; i < data.length; i++) {
+                var currdate = {}
+                day = (data[i].date).substring(0, 2);
+                month = (data[i].date).substring(3, 5)
+                year = (data[i].date).substring(6, 10)
 
-    if(year == yyyy){
-        if(month>mm){   
-            arrset.push(Object.assign(currdate, { date: data[i].date }))   
-        }else if(month == mm){
-            if(day > dd){
-                arrset.push(Object.assign(currdate, { date: data[i].date }))
+                if (year == yyyy) {
+                    if (month > mm) {
+                        arrset.push(Object.assign(currdate, { date: data[i].date }))
+                    } else if (month == mm) {
+                        if (day > dd) {
+                            arrset.push(Object.assign(currdate, { date: data[i].date }))
+                        }
+                    }
+                } else if (year > yyyy) {
+                    arrset.push(Object.assign(currdate, { date: data[i].date }))
+                }
             }
-        }
-    }else if(year > yyyy){
-        arrset.push(Object.assign(currdate, { date: data[i].date })) 
-    }
-}
-res.status(200).json(
-    arrset
-)
-}).catch(function(err){
-res.status(500).json(
-    err
-)
-})
+            res.status(200).json(
+                arrset
+            )
+        }).catch(function (err) {
+            res.status(500).json(
+                err
+            )
+        })
 
 }
 
-function getMeetByall(req,res){
-    db.any("select no,room from roomseq inner join persons on roomseq.hn = persons.hn where personid = "+req.query.id+" and date = '"+req.query.date+"' order by no").then(function(data){
-        
+function getMeetByall(req, res) {
+    db.any("select no,room from roomseq inner join persons on roomseq.hn = persons.hn where personid = " + req.query.id + " and date = '" + req.query.date + "' order by no").then(function (data) {
+
         res.status(200).json(
             data
         )
-    }).catch(function(err){
+    }).catch(function (err) {
         res.status(500).json(
             err
         )
     })
 
 }
-
-
-
 
 
 module.exports = {
@@ -715,7 +678,6 @@ module.exports = {
     getMonthHisbyId,
     getDayHisbyId,
     getItemHisById, // ใช้ในปัจจุบัน
-    updateDelete, //still bug
     allMeetDate,
     getMeetByall
 }

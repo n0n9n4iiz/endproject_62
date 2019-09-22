@@ -48,8 +48,6 @@ app.get('/hisday/' , db.getDayHisbyId);
 
 app.get('/hisitem/' , db.getItemHisById );
 
-app.patch('/updateDelete/' ,db.updateDelete); //bug
-
 app.get('/allMeetDate/' ,db.allMeetDate);
 
 app.get('/MeetDateByAll/' ,db.getMeetByall);
