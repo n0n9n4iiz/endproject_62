@@ -656,17 +656,10 @@ for(var i=0;i<data.length;i++){
     year = (data[i].date).substring(6,10)
 
     if(year == yyyy){
-        if(month>mm){  
-            console.log(month);
-            console.log(mm);
-             
+        if(month>mm){   
             arrset.push(Object.assign(currdate, { date: data[i].date }))   
         }else if(month == mm){
-            
             if(day > dd){
-                console.log(day);
-                console.log(dd);
-                
                 arrset.push(Object.assign(currdate, { date: data[i].date }))
             }
         }
@@ -677,11 +670,25 @@ for(var i=0;i<data.length;i++){
 res.status(200).json(
     arrset
 )
-}).catch(function(e){
+}).catch(function(err){
 res.status(500).json(
-    e
+    err
 )
 })
+
+}
+
+function getMeetByall(req,res){
+    db.any("select * from roomseq where hn = "+req.query.hn+" and date = '"+req.query.date+"' order by no").then(function(data){
+        
+        res.status(200).json(
+            data
+        )
+    }).catch(function(err){
+        res.status(500).json(
+            err
+        )
+    })
 
 }
 
@@ -708,5 +715,6 @@ module.exports = {
     getDayHisbyId,
     getItemHisById, // ใช้ในปัจจุบัน
     updateDelete, //still bug
-    allMeetDate
+    allMeetDate,
+    getMeetByall
 }
