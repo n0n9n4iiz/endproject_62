@@ -679,7 +679,7 @@ res.status(500).json(
 }
 
 function getMeetByall(req,res){
-    db.any("select * from roomseq where hn = "+req.query.hn+" and date = '"+req.query.date+"' order by no").then(function(data){
+    db.any("select no,room from roomseq where hn = "+req.query.hn+" and date = '"+req.query.date+"' order by no").then(function(data){
         
         res.status(200).json(
             data
