@@ -548,29 +548,18 @@ function getDayHisbyId(req, res) {
     }
     var year = req.query.year;
     var month = req.query.month;
-    var dataset;
-    var arrget = [];
-    db.any('select substring(date,1,2) as day ' +
-        'from persons ' +
-        'inner join roomseq ' +
-        'on persons.hn = roomseq.hn ' +
-        "where personid = 1 and substring(date,4,2) = '" + month + "' and substring(date,7,4) = '" + year + "' " +
-        'group by day').then(function (data) {
-            dataset = data;
 
-            for (var i = 0; i < dataset.length; i++) {
-                var day = {};
-                if (parseInt(year) < parseInt(yyyy)) {
-                    arrget.push(Object.assign(day, { day: dataset[i].day }))
-                } else if (parseInt(year) == parseInt(yyyy)) {
-                    if (parseInt(month) < parseInt(mm)) {
-                        arrget.push(Object.assign(day, { day: dataset[i].day }))
-                    } else if (parseInt(month) == parseInt(mm)) {
-                        if (parseInt(dataset[i].day) < parseInt(dd)) {
-                            arrget.push(Object.assign(day, { day: dataset[i].day }))
-                        }
-                    }
-                }
+    var arrget = [];
+    db.any("select date from roomseq "+
+    "inner join persons "+
+    "on roomseq.hn = persons.hn "+
+    "where personid = 1 and date like '%/"+month+"/"+year+"' "+
+    "group by date").then(function (data) {
+            for(var i =0;i<data.length;i++){
+                var datebf = {}
+                if(parseInt((data[i].date).substring(0,2)) < parseInt(dd)){
+                    arrget.push(Object.assign(datebf , {date : data[i].date}))
+                } 
             }
             res.status(200).json(
                 arrget

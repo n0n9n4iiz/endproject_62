@@ -44,7 +44,7 @@ app.get('/hisyear' , db.getYearHisbyId);
 //get id and year from hisyear
 app.get('/hismonth/' , db.getMonthHisbyId);
 //get id and month from his month
-app.get('/hisday/' , db.getDayHisbyId);
+app.get('/hisgroupmoth/' , db.getDayHisbyId);
 
 app.get('/hisitem/' , db.getItemHisById );
 
