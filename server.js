@@ -46,11 +46,13 @@ app.get('/hismonth/' , db.getMonthHisbyId);
 //get id and month from his month
 app.get('/hisgroupmoth/' , db.getDayHisbyId);
 
-app.get('/hisitem/' , db.getItemHisById );
+//app.get('/hisitem/' , db.getItemHisById );
 
 app.get('/allMeetDate/' ,db.allMeetDate);
 
 app.get('/MeetDateByAll/' ,db.getMeetByall);
+
+app.get('/hislist/' , db.hislist );
 
 var port = process.env.PORT || 8080;
 app.listen(port, function () {
