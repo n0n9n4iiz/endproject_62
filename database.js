@@ -648,7 +648,7 @@ function getMeetByall(req, res) {
 
 }
 function hislist(req,res){
-db.any("select * from roomseq inner join persons on persons.hn = roomseq.hn where personid ="+req.query.id+" and date = '"+req.query.date+"'").then(function(data){
+db.any("select * from roomseq inner join persons on persons.hn = roomseq.hn where personid ="+req.query.id+" and date = '"+req.query.date+"' order by no").then(function(data){
 res.status(200).json(
     data
 )
