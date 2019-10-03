@@ -557,12 +557,16 @@ function getDayHisbyId(req, res) {
     "group by date").then(function (data) {
             for(var i =0;i<data.length;i++){
                 var datebf = {}
+                console.log(data[i]);
                 if(parseInt((data[i].date).substring(0,2)) < parseInt(dd)){
+        
                     arrget.push(Object.assign(datebf , {date : data[i].date}))
                 } 
+              
+              
             }
             res.status(200).json(
-                arrget
+                data
             )
         }).catch(function (err) {
             res.status(500).json("fail " + err)
@@ -657,6 +661,14 @@ res.status(200).json(
         err
     )
 })
+}
+
+function changeRoom(req,res){
+// db.any("update from ").then(function(data){
+
+// }).catch(function(err){
+
+// })
 }
 
 
