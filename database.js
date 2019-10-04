@@ -34,7 +34,7 @@ function getPerson(req, res) {
 }
 
 function insertRoomSeq(req, res) {
-    console.log(req.body);
+   
     var hn = req.body.hn;
     var no = req.body.no;
     var room = req.body.room;
