@@ -517,12 +517,21 @@ function getDayHisbyId(req, res) {
             for (var i = 0; i < data.length; i++) {
                 var datebf = {}
                 console.log(data[i]);
-                if (parseInt((data[i].date).substring(0, 2)) < parseInt(dd)) {
+                // if (parseInt((data[i].date).substring(0, 2)) < parseInt(dd)) {
 
+                //     arrget.push(Object.assign(datebf, { date: data[i].date }))
+                // }
+                if(year < yyyy){
                     arrget.push(Object.assign(datebf, { date: data[i].date }))
+                }else if(year == yyyy){
+                    if(month < mm){
+                        arrget.push(Object.assign(datebf, { date: data[i].date }))
+                    }else if(month == mm){
+                        if(parseInt((data[i].date).substring(0, 2)) < parseInt(dd)){
+                            arrget.push(Object.assign(datebf, { date: data[i].date }))
+                        }
+                    }
                 }
-
-
             }
             res.status(200).json(
                 data
@@ -542,6 +551,7 @@ function getItemHisById(req, res) {
         "on roomseq.hn = persons.hn " +
         "where personid = " + id + " and date = '" + date + "' order by no").then(function (data) {
             dataset = data
+            
             res.status(200).json(
                 data
             )
@@ -566,8 +576,6 @@ function allMeetDate(req, res) {
     }
     db.any('select date from roomseq inner join persons on roomseq.hn = persons.hn where personid = ' + req.query.id + ' group by date order by substring(date, 7, 10),substring(date, 4, 5),substring(date,1,2)')
         .then(function (data) {
-
-
             for (var i = 0; i < data.length; i++) {
                 var currdate = {}
                 day = (data[i].date).substring(0, 2);
@@ -586,6 +594,7 @@ function allMeetDate(req, res) {
                     arrset.push(Object.assign(currdate, { date: data[i].date }))
                 }
             }
+
             res.status(200).json(
                 arrset
             )
