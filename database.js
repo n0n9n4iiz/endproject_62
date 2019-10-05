@@ -34,21 +34,21 @@ function getPerson(req, res) {
 }
 
 function insertRoomSeq(req, res) {
-   
+
     var hn = req.body.hn;
     var no = req.body.no;
     var room = req.body.room;
     var date = req.body.date;
     var time = req.body.time;
-
+    console.log(hn);
+    console.log(no);
+    console.log(room);
+    console.log(date);
+    console.log(time);
     db.any('insert into roomseq(hn, no, room, date, time)' +
         "values(" + hn + "," + no + ",'" + room + "','" + date + "','" + time + "')")
         .then(function (data) {
-            res.status(200)
-                .json({
-                    status: 'success',
-                    message: 'Inserted one product'
-                });
+
         })
         .catch(function (error) {
             console.log('ERROR:', error)
@@ -95,36 +95,36 @@ function deleteRoomseqByNo(req, res) {
     var hn = req.query.hn;
     var no = req.query.no;
     var date = req.query.date;
-    
+
     db.any('DELETE FROM roomseq WHERE hn = ' + hn + " and date = '" + date + "' and no=" + no + ';').then(function () {
         db.any('select * from roomseq WHERE hn = ' + hn + " and date = '" + date + "' order by no;").then(function (data) {
             //for x>1
-            for(var i = 0;i<data.length;i++){
+            for (var i = 0; i < data.length; i++) {
                 if (data[i].no != (i + 1)) {
                     db.any('update roomseq set no = ' + (i + 1) + " where no=" + data[i].no).then(function () {
-                        
+
                     }).catch(function (err) {
                         res.status(500).json({
                             err
-                        });  
+                        });
                     })
-                    console.log(data[i].no + " need change to be "+(i+1)); 
+                    console.log(data[i].no + " need change to be " + (i + 1));
                 } else {
                     console.log(data[i].no + " Don't need to change");
                 }
             }
-            db.any('select * from roomseq WHERE hn = ' + hn + " and date = '" + date + "' order by no;").then(function(data){
+            db.any('select * from roomseq WHERE hn = ' + hn + " and date = '" + date + "' order by no;").then(function (data) {
                 res.status(200).json(
                     data
                 )
-            }).catch(function(err){
+            }).catch(function (err) {
                 err
-            })    
-            
+            })
+
         }).catch(function (err) {
             res.status(500).json({
                 err
-            });  
+            });
         })
 
     }).catch(function (error) {
@@ -136,23 +136,33 @@ function deleteRoomseqByNo(req, res) {
 }
 
 
-async function addNewByUser(req, res) {
-    // var d = new Date();
-    // var time = d.toLocaleDateString();
+
+async function addNewByUser(req, res) { //try
     var hn = req.body.hn;
-    var no = req.body.no;
     var room = req.body.room;
-    let date = req.body.date;
-    let tdata
+    let date = req.by.date;
     let noplus
-    //var time = req.body.time;
-    await db.any("select no,date,room,hn from roomseq where hn = '" + hn + "' order by no").then(function (data) {
-        tdata = data
-        res.status(200)
-            .json({
-                status: 'success',
-                message: 'Inserted one product'
-            });
+  
+    await db.any("select no,date,room,hn from roomseq where hn = '" + hn + "' and date ='" + date + "' order by no").then(function (data) {
+        
+        if(data.length == 0){
+            noplus = 1
+        }else{
+            noplus = (data.length+1)
+     }
+    
+
+        db.any('insert into roomseq(hn, no, room, date)' +
+        "values(" + hn + "," + noplus + ",'" + room + "','" + date + "')")
+        .then(function (data) {
+            console.log("add complete");
+
+        })
+        .catch(function (error) {
+            console.log('ERROR:', error)
+        })
+
+        
 
     }).catch(function (error) {
         console.log(error);
@@ -163,52 +173,38 @@ async function addNewByUser(req, res) {
         });
     })
 
-    const check = await checkdate(date, tdata)
+    // const check = await checkdate(date, tdata)
 
-    console.log("check =" + check);
-    var count = 0;
-    if (check == undefined) {
-        noplus = 1
-    } else {
-        for (var j = 0; j < tdata.length; j++) {
-            if (check == tdata[j].date) {
-                count++
-            }
-        }
-        noplus = count + 1
-    }
-
-
-    // for(i=0;i<tdata.length;i++){
-    //     console.log(tdata[i])
+    // var count = 0;
+    // if (check == undefined) {
+    //     noplus = 1
+    // } else {
+    //     for (var j = 0; j < tdata.length; j++) {
+    //         if (check == tdata[j].date) {
+    //             count++
+    //         }
+    //     }
+    //     noplus = count + 1
     // }
-    db.any('insert into roomseq(hn, no, room, date)' +
-        "values(" + hn + "," + noplus + ",'" + room + "','" + date + "')")
-        .then(function (data) {
-            console.log("add complete");
 
-        })
-        .catch(function (error) {
-            console.log('ERROR:', error)
-        })
+
 }
 
-async function checkdate(date, tdata) {
-    let result = await loopcheckdate(date, tdata)
-    //console.log("result:"+result) // 
-    return result
-}
+// async function checkdate(date, tdata) {
+//     let result = await loopcheckdate(date, tdata)
+//     return result
+// }
 
-function loopcheckdate(date, tdata) {
-    let result
-    for (let i = 0; i < tdata.length; i++) {
-        if (tdata[i].date == date) {
-            result = tdata[i].date
-            break
-        }
-    }
-    return result
-}
+// function loopcheckdate(date, tdata) {
+//     let result
+//     for (let i = 0; i < tdata.length; i++) {
+//         if (tdata[i].date == date) {
+//             result = tdata[i].date
+//             break
+//         }
+//     }
+//     return result
+// }
 
 
 async function getAllRoomseq(req, res) {
@@ -550,20 +546,20 @@ function getDayHisbyId(req, res) {
     var month = req.query.month;
 
     var arrget = [];
-    db.any("select date from roomseq "+
-    "inner join persons "+
-    "on roomseq.hn = persons.hn "+
-    "where personid = 1 and date like '%/"+month+"/"+year+"' "+
-    "group by date").then(function (data) {
-            for(var i =0;i<data.length;i++){
+    db.any("select date from roomseq " +
+        "inner join persons " +
+        "on roomseq.hn = persons.hn " +
+        "where personid = 1 and date like '%/" + month + "/" + year + "' " +
+        "group by date").then(function (data) {
+            for (var i = 0; i < data.length; i++) {
                 var datebf = {}
                 console.log(data[i]);
-                if(parseInt((data[i].date).substring(0,2)) < parseInt(dd)){
-        
-                    arrget.push(Object.assign(datebf , {date : data[i].date}))
-                } 
-              
-              
+                if (parseInt((data[i].date).substring(0, 2)) < parseInt(dd)) {
+
+                    arrget.push(Object.assign(datebf, { date: data[i].date }))
+                }
+
+
             }
             res.status(200).json(
                 data
@@ -651,24 +647,24 @@ function getMeetByall(req, res) {
     })
 
 }
-function hislist(req,res){
-db.any("select * from roomseq inner join persons on persons.hn = roomseq.hn where personid ="+req.query.id+" and date = '"+req.query.date+"' order by no").then(function(data){
-res.status(200).json(
-    data
-)
-}).catch(function(err){
-    res.status(500).json(
-        err
-    )
-})
+function hislist(req, res) {
+    db.any("select * from roomseq inner join persons on persons.hn = roomseq.hn where personid =" + req.query.id + " and date = '" + req.query.date + "' order by no").then(function (data) {
+        res.status(200).json(
+            data
+        )
+    }).catch(function (err) {
+        res.status(500).json(
+            err
+        )
+    })
 }
 
-function changeRoom(req,res){
-// db.any("update from ").then(function(data){
+function changeRoom(req, res) {
+    // db.any("update from ").then(function(data){
 
-// }).catch(function(err){
+    // }).catch(function(err){
 
-// })
+    // })
 }
 
 
