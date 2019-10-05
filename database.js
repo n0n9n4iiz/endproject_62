@@ -155,7 +155,9 @@ async function addNewByUser(req, res) { //try
         db.any('insert into roomseq(hn, no, room, date)' +
         "values(" + hn + "," + noplus + ",'" + room + "','" + date + "')")
         .then(function (data) {
-            console.log("add complete");
+           res.status(200).json({
+               success : "success"
+           })
 
         })
         .catch(function (error) {
