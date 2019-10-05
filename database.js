@@ -140,7 +140,7 @@ function deleteRoomseqByNo(req, res) {
 async function addNewByUser(req, res) { //try
     var hn = req.body.hn;
     var room = req.body.room;
-    let date = req.by.date;
+    let date = req.body.date;
     let noplus
   
     await db.any("select no,date,room,hn from roomseq where hn = '" + hn + "' and date ='" + date + "' order by no").then(function (data) {
