@@ -150,8 +150,6 @@ async function addNewByUser(req, res) { //try
         }else{
             noplus = (data.length+1)
      }
-    
-
         db.any('insert into roomseq(hn, no, room, date)' +
         "values(" + hn + "," + noplus + ",'" + room + "','" + date + "')")
         .then(function (data) {
@@ -163,9 +161,6 @@ async function addNewByUser(req, res) { //try
         .catch(function (error) {
             console.log('ERROR:', error)
         })
-
-        
-
     }).catch(function (error) {
         console.log(error);
         res.status(500).json({
@@ -174,39 +169,7 @@ async function addNewByUser(req, res) { //try
             message: 'Failed To Retrieved ALL products'
         });
     })
-
-    // const check = await checkdate(date, tdata)
-
-    // var count = 0;
-    // if (check == undefined) {
-    //     noplus = 1
-    // } else {
-    //     for (var j = 0; j < tdata.length; j++) {
-    //         if (check == tdata[j].date) {
-    //             count++
-    //         }
-    //     }
-    //     noplus = count + 1
-    // }
-
-
 }
-
-// async function checkdate(date, tdata) {
-//     let result = await loopcheckdate(date, tdata)
-//     return result
-// }
-
-// function loopcheckdate(date, tdata) {
-//     let result
-//     for (let i = 0; i < tdata.length; i++) {
-//         if (tdata[i].date == date) {
-//             result = tdata[i].date
-//             break
-//         }
-//     }
-//     return result
-// }
 
 
 async function getAllRoomseq(req, res) {
@@ -480,7 +443,7 @@ function getYearHisbyId(req, res) {
         "from persons " +
         "inner join roomseq " +
         "on persons.hn = roomseq.hn " +
-        "where personid = 1 " +
+        "where personid = " + req.query.id  +" "+
         "group by year").then(function (data) {
             dataset = data;
             for (var i = 0; i < dataset.length; i++) {
@@ -512,7 +475,7 @@ function getMonthHisbyId(req, res) {
         'from persons ' +
         'inner join roomseq ' +
         'on persons.hn = roomseq.hn ' +
-        "where personid = 1 and substring(date,7,4) = '" + year + "' " +
+        "where personid = '"+req.query.id+"' and substring(date,7,4) = '" + year + "' " +
         'group by month').then(function (data) {
             dataset = data;
             for (var i = 0; i < dataset.length; i++) {
@@ -551,7 +514,7 @@ function getDayHisbyId(req, res) {
     db.any("select date from roomseq " +
         "inner join persons " +
         "on roomseq.hn = persons.hn " +
-        "where personid = 1 and date like '%/" + month + "/" + year + "' " +
+        "where personid = '"+req.query.id+"' and date like '%/" + month + "/" + year + "' " +
         "group by date").then(function (data) {
             for (var i = 0; i < data.length; i++) {
                 var datebf = {}
@@ -636,19 +599,6 @@ function allMeetDate(req, res) {
 
 }
 
-function getMeetByall(req, res) {
-    db.any("select no,room from roomseq inner join persons on roomseq.hn = persons.hn where personid = " + req.query.id + " and date = '" + req.query.date + "' order by no").then(function (data) {
-
-        res.status(200).json(
-            data
-        )
-    }).catch(function (err) {
-        res.status(500).json(
-            err
-        )
-    })
-
-}
 function hislist(req, res) {
     db.any("select * from roomseq inner join persons on persons.hn = roomseq.hn where personid =" + req.query.id + " and date = '" + req.query.date + "' order by no").then(function (data) {
         res.status(200).json(
@@ -662,11 +612,15 @@ function hislist(req, res) {
 }
 
 function changeRoom(req, res) {
-    // db.any("update from ").then(function(data){
+    
+    var oldname = req.body.oldname;
+    var newname = req.body.newname;
 
-    // }).catch(function(err){
+    db.any('update public."Point" set p_name = '+"'"+newname+"'"+" where p_name = '"+oldname+"'").then(function(data){
 
-    // })
+    }).catch(function(err){
+
+    })
 }
 
 
@@ -689,6 +643,6 @@ module.exports = {
     getDayHisbyId,
     getItemHisById, // ใช้ในปัจจุบัน
     allMeetDate,
-    getMeetByall,
-    hislist
+    hislist,
+    changeRoom
 }

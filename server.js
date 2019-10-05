@@ -50,11 +50,9 @@ app.get('/hisgroupmoth/' , db.getDayHisbyId);
 
 app.get('/allMeetDate/' ,db.allMeetDate);
 
-app.get('/MeetDateByAll/' ,db.getMeetByall);
-
 app.get('/hislist/' , db.hislist );
 //web change name
-//app.update('/');
+app.patch('/editnameroom/' ,db.changeRoom);
 
 var port = process.env.PORT || 8080;
 app.listen(port, function () {
