@@ -534,7 +534,7 @@ function getDayHisbyId(req, res) {
                 }
             }
             res.status(200).json(
-                data
+                arrget
             )
         }).catch(function (err) {
             res.status(500).json("fail " + err)
