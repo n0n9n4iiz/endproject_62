@@ -596,7 +596,18 @@ function allMeetDate(req, res) {
         })
 
 }
-
+function getMeetByall(req, res) {
+    db.any("select no,room from roomseq inner join persons on roomseq.hn = persons.hn where personid = " + req.query.id + " and date = '" + req.query.date + "' order by no").then(function (data) {
+        res.status(200).json(
+            data
+        )
+        }).catch(function(err){
+            res.status(500).json(
+                err
+            )
+        })    
+    }
+    
 function hislist(req, res) {
     db.any("select * from roomseq inner join persons on persons.hn = roomseq.hn where personid =" + req.query.id + " and date = '" + req.query.date + "' order by no").then(function (data) {
         res.status(200).json(
@@ -642,5 +653,6 @@ module.exports = {
     getItemHisById, // ใช้ในปัจจุบัน
     allMeetDate,
     hislist,
+    getMeetByall,
     changeRoom
 }

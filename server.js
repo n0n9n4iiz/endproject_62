@@ -47,6 +47,7 @@ app.get('/hismonth/' , db.getMonthHisbyId);
 app.get('/hisgroupmoth/' , db.getDayHisbyId);
 
 //app.get('/hisitem/' , db.getItemHisById );
+app.get('/MeetDateByAll/' ,db.getMeetByall);
 
 app.get('/allMeetDate/' ,db.allMeetDate);
 
