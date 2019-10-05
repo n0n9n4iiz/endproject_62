@@ -100,18 +100,17 @@ function deleteRoomseqByNo(req, res) {
         db.any('select * from roomseq WHERE hn = ' + hn + " and date = '" + date + "' order by no;").then(function (data) {
             //for x>1
             for (var i = 0; i < data.length; i++) {
-                if (data[i].no != (i + 1)) {
-                    db.any('update roomseq set no = ' + (i + 1) + " where no=" + data[i].no).then(function () {
+                setTimeout(function () {
+                    if (data[i].no != (i + 1)) {
+                        db.any('update roomseq set no = ' + (i + 1) + " where no=" + data[i].no).then(function () {
+                        }).catch(function (err) {
+                            res.status(500).json({
+                                err
+                            });
+                        })
+                    }
+                }, 500)
 
-                    }).catch(function (err) {
-                        res.status(500).json({
-                            err
-                        });
-                    })
-                    console.log(data[i].no + " need change to be " + (i + 1));
-                } else {
-                    console.log(data[i].no + " Don't need to change");
-                }
             }
             db.any('select * from roomseq WHERE hn = ' + hn + " and date = '" + date + "' order by no;").then(function (data) {
                 res.status(200).json(
@@ -142,25 +141,25 @@ async function addNewByUser(req, res) { //try
     var room = req.body.room;
     let date = req.body.date;
     let noplus
-  
-    await db.any("select no,date,room,hn from roomseq where hn = '" + hn + "' and date ='" + date + "' order by no").then(function (data) {
-        
-        if(data.length == 0){
-            noplus = 1
-        }else{
-            noplus = (data.length+1)
-     }
-        db.any('insert into roomseq(hn, no, room, date)' +
-        "values(" + hn + "," + noplus + ",'" + room + "','" + date + "')")
-        .then(function (data) {
-           res.status(200).json({
-               success : "success"
-           })
 
-        })
-        .catch(function (error) {
-            console.log('ERROR:', error)
-        })
+    await db.any("select no,date,room,hn from roomseq where hn = '" + hn + "' and date ='" + date + "' order by no").then(function (data) {
+
+        if (data.length == 0) {
+            noplus = 1
+        } else {
+            noplus = (data.length + 1)
+        }
+        db.any('insert into roomseq(hn, no, room, date)' +
+            "values(" + hn + "," + noplus + ",'" + room + "','" + date + "')")
+            .then(function (data) {
+                res.status(200).json({
+                    success: "success"
+                })
+
+            })
+            .catch(function (error) {
+                console.log('ERROR:', error)
+            })
     }).catch(function (error) {
         console.log(error);
         res.status(500).json({
@@ -443,7 +442,7 @@ function getYearHisbyId(req, res) {
         "from persons " +
         "inner join roomseq " +
         "on persons.hn = roomseq.hn " +
-        "where personid = " + req.query.id  +" "+
+        "where personid = " + req.query.id + " " +
         "group by year").then(function (data) {
             dataset = data;
             for (var i = 0; i < dataset.length; i++) {
@@ -475,7 +474,7 @@ function getMonthHisbyId(req, res) {
         'from persons ' +
         'inner join roomseq ' +
         'on persons.hn = roomseq.hn ' +
-        "where personid = '"+req.query.id+"' and substring(date,7,4) = '" + year + "' " +
+        "where personid = '" + req.query.id + "' and substring(date,7,4) = '" + year + "' " +
         'group by month').then(function (data) {
             dataset = data;
             for (var i = 0; i < dataset.length; i++) {
@@ -514,7 +513,7 @@ function getDayHisbyId(req, res) {
     db.any("select date from roomseq " +
         "inner join persons " +
         "on roomseq.hn = persons.hn " +
-        "where personid = '"+req.query.id+"' and date like '%/" + month + "/" + year + "' " +
+        "where personid = '" + req.query.id + "' and date like '%/" + month + "/" + year + "' " +
         "group by date").then(function (data) {
             for (var i = 0; i < data.length; i++) {
                 var datebf = {}
@@ -612,13 +611,13 @@ function hislist(req, res) {
 }
 
 function changeRoom(req, res) {
-    
+
     var oldname = req.body.oldname;
     var newname = req.body.newname;
 
-    db.any('update public."Point" set p_name = '+"'"+newname+"'"+" where p_name = '"+oldname+"'").then(function(data){
+    db.any('update public."Point" set p_name = ' + "'" + newname + "'" + " where p_name = '" + oldname + "'").then(function (data) {
 
-    }).catch(function(err){
+    }).catch(function (err) {
 
     })
 }
