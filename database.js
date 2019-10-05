@@ -100,7 +100,6 @@ function deleteRoomseqByNo(req, res) {
         db.any('select * from roomseq WHERE hn = ' + hn + " and date = '" + date + "' order by no;").then(function (data) {
             //for x>1
             for (var i = 0; i < data.length; i++) {
-                setTimeout(function () {
                     if (data[i].no != (i + 1)) {
                         db.any('update roomseq set no = ' + (i + 1) + " where no=" + data[i].no).then(function () {
                         }).catch(function (err) {
@@ -109,17 +108,17 @@ function deleteRoomseqByNo(req, res) {
                             });
                         })
                     }
-                }, 500)
-
             }
-            db.any('select * from roomseq WHERE hn = ' + hn + " and date = '" + date + "' order by no;").then(function (data) {
+            setTimeout(function(){
+db.any('select * from roomseq WHERE hn = ' + hn + " and date = '" + date + "' order by no;").then(function (data) {
                 res.status(200).json(
                     data
                 )
             }).catch(function (err) {
                 err
             })
-
+            },1000)
+        
         }).catch(function (err) {
             res.status(500).json({
                 err
