@@ -117,7 +117,7 @@ db.any('select * from roomseq WHERE hn = ' + hn + " and date = '" + date + "' or
             }).catch(function (err) {
                 err
             })
-            },1000)
+            },2000)
         
         }).catch(function (err) {
             res.status(500).json({
