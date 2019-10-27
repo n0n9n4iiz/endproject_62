@@ -516,11 +516,6 @@ function getDayHisbyId(req, res) {
         "group by date").then(function (data) {
             for (var i = 0; i < data.length; i++) {
                 var datebf = {}
-                console.log(data[i]);
-                // if (parseInt((data[i].date).substring(0, 2)) < parseInt(dd)) {
-
-                //     arrget.push(Object.assign(datebf, { date: data[i].date }))
-                // }
                 if(year < yyyy){
                     arrget.push(Object.assign(datebf, { date: data[i].date }))
                 }else if(year == yyyy){
@@ -634,7 +629,7 @@ function changeRoom(req, res) {
     var oldname = req.body.oldname;
     var newname = req.body.newname;
 
-    db.any('update public."Point" set p_name = ' + "'" + newname + "'" + " where p_name = '" + oldname + "'").then(function (data) {
+    db.any('update public."point_v1" set p_name = ' + "'" + newname + "'" + " where p_name = '" + oldname + "'").then(function (data) {
 
     }).catch(function (err) {
 
