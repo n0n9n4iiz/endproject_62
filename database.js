@@ -101,15 +101,13 @@ function deleteRoomseqByNo(req, res) {
             //for x>1
             for (var i = 0; i < data.length; i++) {
                     if (data[i].no != (i + 1)) {
-                        setTimeout(function(){
  db.any('update roomseq set no = ' + (i + 1) + " where no=" + data[i].no).then(function () {
                         }).catch(function (err) {
                             res.status(500).json({
                                 err
                             });
                         })
-                        },1000)
-                       
+                    
                     }
             }
             setTimeout(function(){
