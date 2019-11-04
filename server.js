@@ -55,6 +55,8 @@ app.get('/hislist/' , db.hislist );
 //web change name
 app.patch('/editnameroom/' ,db.changeRoom);
 
+app.get('/gethn/:id' , db.checkHN);
+
 var port = process.env.PORT || 8080;
 app.listen(port, function () {
 console.log('App is runnb ing on http://localhost:' + port);

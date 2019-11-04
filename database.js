@@ -633,8 +633,23 @@ function changeRoom(req, res) {
     db.any('update public."point_v1" set p_name = ' + "'" + newname + "'" + " where p_name = '" + oldname + "'").then(function (data) {
 
     }).catch(function (err) {
-
+        res.status(500).json(
+            err
+        )
     })
+}
+function checkHN(req,res){
+    var id = req.params.id
+db.any("select hn from persons where personid = "+id).then(function(data){
+    res.status(200).json(
+        data
+    )
+}).catch(function(err){
+    res.status(500).json(
+        err
+    )
+})
+    
 }
 
 
@@ -659,5 +674,6 @@ module.exports = {
     allMeetDate,
     hislist,
     getMeetByall,
-    changeRoom
+    changeRoom,
+    checkHN
 }
