@@ -57,6 +57,8 @@ app.patch('/editnameroom/' ,db.changeRoom);
 
 app.get('/gethn/:id' , db.checkHN);
 
+app.delete('/delGroupMeetDate/',db.delGroupdate)
+
 var port = process.env.PORT || 8080;
 app.listen(port, function () {
 console.log('App is runnb ing on http://localhost:' + port);

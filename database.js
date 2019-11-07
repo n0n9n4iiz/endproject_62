@@ -649,7 +649,19 @@ db.any("select hn from persons where personid = "+id).then(function(data){
         err
     )
 })
-    
+}
+function delGroupdate(req,res){
+    var hn = req.query.hn;
+    var date = req.query.date;
+    db.any("delete from roomseq where hn= "+hn+" and date = '"+date+"'").then(function(data){
+        res.status(200).json(
+            'success'
+        )
+    }).catch(function(err){
+        res.status(500).json(
+            err
+        )
+    })
 }
 
 
@@ -675,5 +687,6 @@ module.exports = {
     hislist,
     getMeetByall,
     changeRoom,
-    checkHN
+    checkHN,
+    delGroupdate
 }
