@@ -3,10 +3,8 @@ var db = pgp('postgres://ejhivrfxrvzsam:e6ea27848d6af9115aa2c68040e674502dbfb9d2
 function getLogin(req, res) {
     var id = req.query.id;
     var bdate = req.query.bdate;
-    db.any("select * from persons where personid = " + id + " and birthdate = '" + bdate + "'").then(function (data) {
-        console.log(data);
-        
-        if(data == null){
+    db.any("select * from persons where personid = " + id + " and birthdate = '" + bdate + "'").then(function (data) { 
+        if(Array.isArray(data) && empty){
             res.status(200).json({
                 personid:0
             }) 
