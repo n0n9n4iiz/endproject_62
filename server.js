@@ -12,6 +12,7 @@ extended: true
 app.get('/', function (req, res) {
     res.send('Express is running');
 });
+app.get('/getlogin/',db.getLogin);
 
 app.get('/allperson',db.getAllPerson);
 

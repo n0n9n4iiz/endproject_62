@@ -1,11 +1,22 @@
 const pgp = require('pg-promise')();
 var db = pgp('postgres://ejhivrfxrvzsam:e6ea27848d6af9115aa2c68040e674502dbfb9d288840cac04cbda3e90607967@ec2-107-20-167-241.compute-1.amazonaws.com:5432/d80ue59kfg9h7u?ssl=true');
-
+function getLogin(req, res) {
+    var id = req.query.id;
+    var bdate = req.query.bdate;
+    db.any("select * from persons where personid = " + id + " and birthdate = '" + bdate + "'").then(function (data) {
+        res.status(200).json(
+            data
+        )
+    }).catch(function (err) {
+        res.status(500).json(
+            err
+        )
+    })
+}
 function getAllPerson(req, res) {
     db.any('select * from persons').then(function (data) {
         res.status(200).json(
             data
-
         );
     }).catch(function (error) {
         console.log(error);
@@ -100,26 +111,26 @@ function deleteRoomseqByNo(req, res) {
         db.any('select * from roomseq WHERE hn = ' + hn + " and date = '" + date + "' order by no;").then(function (data) {
             //for x>1
             for (var i = 0; i < data.length; i++) {
-                    if (data[i].no != (i + 1)) {
- db.any('update roomseq set no = ' + (i + 1) + " where no=" + data[i].no).then(function () {
-                        }).catch(function (err) {
-                            res.status(500).json({
-                                err
-                            });
-                        })
-                    
-                    }
+                if (data[i].no != (i + 1)) {
+                    db.any('update roomseq set no = ' + (i + 1) + " where no=" + data[i].no).then(function () {
+                    }).catch(function (err) {
+                        res.status(500).json({
+                            err
+                        });
+                    })
+
+                }
             }
-            setTimeout(function(){
-db.any('select * from roomseq WHERE hn = ' + hn + " and date = '" + date + "' order by no;").then(function (data) {
-                res.status(200).json(
-                    data
-                )
-            }).catch(function (err) {
-                err
-            })
-            },2000)
-        
+            setTimeout(function () {
+                db.any('select * from roomseq WHERE hn = ' + hn + " and date = '" + date + "' order by no;").then(function (data) {
+                    res.status(200).json(
+                        data
+                    )
+                }).catch(function (err) {
+                    err
+                })
+            }, 2000)
+
         }).catch(function (err) {
             res.status(500).json({
                 err
@@ -517,13 +528,13 @@ function getDayHisbyId(req, res) {
         "group by date").then(function (data) {
             for (var i = 0; i < data.length; i++) {
                 var datebf = {}
-                if(year < yyyy){
+                if (year < yyyy) {
                     arrget.push(Object.assign(datebf, { date: data[i].date }))
-                }else if(year == yyyy){
-                    if(month < mm){
+                } else if (year == yyyy) {
+                    if (month < mm) {
                         arrget.push(Object.assign(datebf, { date: data[i].date }))
-                    }else if(month == mm){
-                        if(parseInt((data[i].date).substring(0, 2)) < parseInt(dd)){
+                    } else if (month == mm) {
+                        if (parseInt((data[i].date).substring(0, 2)) < parseInt(dd)) {
                             arrget.push(Object.assign(datebf, { date: data[i].date }))
                         }
                     }
@@ -547,7 +558,7 @@ function getItemHisById(req, res) {
         "on roomseq.hn = persons.hn " +
         "where personid = " + id + " and date = '" + date + "' order by no").then(function (data) {
             dataset = data
-            
+
             res.status(200).json(
                 data
             )
@@ -606,13 +617,13 @@ function getMeetByall(req, res) {
         res.status(200).json(
             data
         )
-        }).catch(function(err){
-            res.status(500).json(
-                err
-            )
-        })    
-    }
-    
+    }).catch(function (err) {
+        res.status(500).json(
+            err
+        )
+    })
+}
+
 function hislist(req, res) {
     db.any("select * from roomseq inner join persons on persons.hn = roomseq.hn where personid =" + req.query.id + " and date = '" + req.query.date + "' order by no").then(function (data) {
         res.status(200).json(
@@ -638,26 +649,26 @@ function changeRoom(req, res) {
         )
     })
 }
-function checkHN(req,res){
+function checkHN(req, res) {
     var id = req.params.id
-db.any("select hn from persons where personid = "+id).then(function(data){
-    res.status(200).json(
-        data
-    )
-}).catch(function(err){
-    res.status(500).json(
-        err
-    )
-})
+    db.any("select hn from persons where personid = " + id).then(function (data) {
+        res.status(200).json(
+            data
+        )
+    }).catch(function (err) {
+        res.status(500).json(
+            err
+        )
+    })
 }
-function delGroupdate(req,res){
+function delGroupdate(req, res) {
     var hn = req.query.hn;
     var date = req.query.date;
-    db.any("delete from roomseq where hn= "+hn+" and date = '"+date+"'").then(function(data){
+    db.any("delete from roomseq where hn= " + hn + " and date = '" + date + "'").then(function (data) {
         res.status(200).json(
             'success'
         )
-    }).catch(function(err){
+    }).catch(function (err) {
         res.status(500).json(
             err
         )
@@ -666,6 +677,7 @@ function delGroupdate(req,res){
 
 
 module.exports = {
+    getLogin,
     getAllPerson,
     getPerson,
     insertRoomSeq,
