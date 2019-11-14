@@ -8,8 +8,9 @@ function getLogin(req, res) {
             data
         )
     }).catch(function (err) {
-        res.status(500).json(
-            err
+        res.status(500).json({
+            personid:0
+        }
         )
     })
 }
