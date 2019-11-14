@@ -5,9 +5,9 @@ function getLogin(req, res) {
     var bdate = req.query.bdate;
     db.any("select * from persons where personid = " + id + " and birthdate = '" + bdate + "'").then(function (data) { 
         if(data.length == 0){
-            res.status(200).json({
+            res.status(200).json([{
                 personid:0
-            }) 
+            }]) 
         }else{
         res.status(200).json(
             data
