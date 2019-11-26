@@ -658,7 +658,7 @@ function changeRoom(req, res) {
 }
 function checkHN(req, res) {
     var id = req.params.id
-    db.any("select hn from persons where personid = " + id).then(function (data) {
+    db.any("select * from persons where personid = " + id).then(function (data) {
         res.status(200).json(
             data
         )
